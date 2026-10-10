@@ -1,0 +1,348 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  JunexisLang syntax highlighting definition for AvaloniaEdit.
+  Based on: junexis-lang/spec/02-lexical.md
+            junexis-tooling/syntaxes/junexis.tmLanguage.json
+-->
+<SyntaxDefinition name="JunexisLang" extensions=".jnx"
+                  xmlns="http://icsharpcode.net/sharpdevelop/syntaxdefinition/2008">
+
+  <Color name="Comment"           foreground="#6A9955" fontStyle="italic" />
+  <Color name="DocComment"        foreground="#608B4E" fontStyle="italic" />
+  <Color name="String"            foreground="#CE9178" />
+  <Color name="InterpolatedString" foreground="#CE9178" />
+  <Color name="Char"              foreground="#CE9178" />
+  <Color name="Number"            foreground="#B5CEA8" />
+  <Color name="Duration"          foreground="#B5CEA8" fontStyle="italic" />
+  <Color name="Keyword"           foreground="#569CD6" fontWeight="bold" />
+  <Color name="ControlFlow"       foreground="#C586C0" />
+  <Color name="Declaration"       foreground="#569CD6" fontWeight="bold" />
+  <Color name="Communication"     foreground="#4EC9B0" fontWeight="bold" />
+  <Color name="Resilience"        foreground="#D7BA7D" />
+  <Color name="Lifecycle"         foreground="#D7BA7D" fontStyle="italic" />
+  <Color name="Modifier"          foreground="#569CD6" />
+  <Color name="BooleanNull"       foreground="#569CD6" />
+  <Color name="PlatformAnnotation" foreground="#D16969" fontWeight="bold" />
+  <Color name="NarrativeAttribute" foreground="#DCDCAA" />
+  <Color name="Type"              foreground="#4EC9B0" />
+  <Color name="PrimitiveType"     foreground="#4EC9B0" fontWeight="bold" />
+  <Color name="Operator"          foreground="#D4D4D4" />
+  <Color name="CommunicationOp"   foreground="#4EC9B0" />
+  <Color name="PipelineOp"        foreground="#4EC9B0" fontWeight="bold" />
+  <Color name="FunctionName"      foreground="#FFE484" fontWeight="bold" />
+  <Color name="Punctuation"       foreground="#D4D4D4" />
+
+  <RuleSet ignoreCase="false">
+
+    <!-- ============ Comments ============ -->
+
+    <!-- Documentation comments: /// -->
+    <Span color="DocComment" multiline="false">
+      <Begin>///</Begin>
+    </Span>
+
+    <!-- Line comments: // -->
+    <Span color="Comment" multiline="false">
+      <Begin>//</Begin>
+    </Span>
+
+    <!-- Block comments: /* ... */ -->
+    <Span color="Comment" multiline="true">
+      <Begin>/\*</Begin>
+      <End>\*/</End>
+    </Span>
+
+    <!-- ============ Strings ============ -->
+
+    <!-- Multi-line strings: triple double quotes -->
+    <Span color="String" multiline="true">
+      <Begin>"""</Begin>
+      <End>"""</End>
+    </Span>
+
+    <!-- Interpolated strings: f"..." -->
+    <Span color="InterpolatedString" multiline="false">
+      <Begin>f"</Begin>
+      <End>"</End>
+      <RuleSet>
+        <Span begin="\{" end="\}" color="Punctuation" />
+        <Rule color="Char">\\.</Rule>
+      </RuleSet>
+    </Span>
+
+    <!-- Raw strings: @"..." with doubled quotes as escapes -->
+    <Span color="String" multiline="false">
+      <Begin>@"</Begin>
+      <End>"</End>
+      <RuleSet>
+        <Rule color="Char">""</Rule>
+      </RuleSet>
+    </Span>
+
+    <!-- Double-quoted strings -->
+    <Span color="String" multiline="false">
+      <Begin>"</Begin>
+      <End>"</End>
+      <RuleSet>
+        <Rule color="Char">\\.</Rule>
+      </RuleSet>
+    </Span>
+
+    <!-- Single-quoted strings -->
+    <Span color="String" multiline="false">
+      <Begin>'</Begin>
+      <End>'</End>
+      <RuleSet>
+        <Rule color="Char">\\.</Rule>
+      </RuleSet>
+    </Span>
+
+    <!-- ============ Platform Annotations ============ -->
+    <!-- @embedded, @server, @report, @edge, etc. -->
+    <Rule color="PlatformAnnotation">
+      @(embedded|server|report|edge|cloud_server|mobile|desktop|web|microcontroller|fog_node|data_center)\b
+    </Rule>
+    <Rule color="PlatformAnnotation">
+      @[A-Za-z_][A-Za-z0-9_]*\b
+    </Rule>
+
+    <!-- ============ Numbers ============ -->
+
+    <!-- Duration literals: 10ms, 5s, 2m, 1h, 24h, 1d -->
+    <Rule color="Duration">
+      \b[0-9]+(ns|us|ms|s|m|h|d)\b
+    </Rule>
+
+    <!-- Memory literals: 4KB, 16MB, 1GB -->
+    <Rule color="Duration">
+      \b[0-9]+(KB|MB|GB|TB|PB)\b
+    </Rule>
+
+    <!-- Hex literals -->
+    <Rule color="Number">
+      \b0[xX][0-9a-fA-F][0-9a-fA-F_]*\b
+    </Rule>
+
+    <!-- Binary literals -->
+    <Rule color="Number">
+      \b0[bB][01][01_]*\b
+    </Rule>
+
+    <!-- Octal literals -->
+    <Rule color="Number">
+      \b0[oO][0-7][0-7_]*\b
+    </Rule>
+
+    <!-- Float with suffix -->
+    <Rule color="Number">
+      \b[0-9][0-9_]*\.[0-9][0-9_]*([eE][+-]?[0-9]+)?(f32|f64)?\b
+    </Rule>
+
+    <!-- Integer with suffix -->
+    <Rule color="Number">
+      \b[0-9][0-9_]*(i8|i16|i32|i64|u8|u16|u32|u64)?\b
+    </Rule>
+
+    <!-- ============ Keywords ============ -->
+
+    <!-- Declaration keywords -->
+    <Keywords color="Declaration">
+      <Word>task</Word>
+      <Word>struct</Word>
+      <Word>enum</Word>
+      <Word>fn</Word>
+      <Word>pipeline</Word>
+      <Word>supervisor</Word>
+      <Word>device</Word>
+      <Word>native</Word>
+      <Word>config</Word>
+      <Word>narrative</Word>
+      <Word>deployment</Word>
+      <Word>project</Word>
+      <Word>import</Word>
+      <Word>as</Word>
+      <Word>from</Word>
+      <Word>type</Word>
+      <Word>extern</Word>
+      <Word>protocol</Word>
+      <Word>quirks</Word>
+    </Keywords>
+
+    <!-- Control flow -->
+    <Keywords color="ControlFlow">
+      <Word>if</Word>
+      <Word>else</Word>
+      <Word>while</Word>
+      <Word>for</Word>
+      <Word>loop</Word>
+      <Word>in</Word>
+      <Word>match</Word>
+      <Word>when</Word>
+      <Word>select</Word>
+      <Word>return</Word>
+      <Word>delay</Word>
+      <Word>break</Word>
+      <Word>continue</Word>
+      <Word>every</Word>
+      <Word>on</Word>
+    </Keywords>
+
+    <!-- Communication keywords -->
+    <Keywords color="Communication">
+      <Word>send</Word>
+      <Word>receive</Word>
+      <Word>recv</Word>
+      <Word>respond</Word>
+      <Word>ack</Word>
+      <Word>nack</Word>
+      <Word>supervise</Word>
+      <Word>broadcast</Word>
+      <Word>chan</Word>
+      <Word>queue</Word>
+      <Word>stream</Word>
+      <Word>to</Word>
+    </Keywords>
+
+    <!-- Resilience / distributed keywords -->
+    <Keywords color="Resilience">
+      <Word>circuit_breaker</Word>
+      <Word>retry</Word>
+      <Word>timeout</Word>
+      <Word>bulkhead</Word>
+      <Word>backpressure</Word>
+      <Word>rate_limiter</Word>
+      <Word>resilience_policy</Word>
+      <Word>adaptive_timeout</Word>
+      <Word>health_monitoring</Word>
+      <Word>load_balancing</Word>
+      <Word>auto_scaling</Word>
+      <Word>consensus</Word>
+      <Word>distributed_locks</Word>
+      <Word>coordinator</Word>
+      <Word>replication</Word>
+      <Word>partition_tolerance</Word>
+      <Word>failure_threshold</Word>
+      <Word>recovery_time</Word>
+      <Word>max_attempts</Word>
+      <Word>percentile</Word>
+      <Word>initial_delay</Word>
+      <Word>max_delay</Word>
+      <Word>backoff_multiplier</Word>
+    </Keywords>
+
+    <!-- Lifecycle hooks -->
+    <Keywords color="Lifecycle">
+      <Word>on_start</Word>
+      <Word>on_stop</Word>
+      <Word>on_restart</Word>
+      <Word>on_child_failure</Word>
+      <Word>on_escalated_failure</Word>
+      <Word>on_state_change</Word>
+      <Word>on_rate_limit_exceeded</Word>
+    </Keywords>
+
+    <!-- Narrative / observability attributes -->
+    <Keywords color="NarrativeAttribute">
+      <Word>intent</Word>
+      <Word>compliance</Word>
+      <Word>trace</Word>
+      <Word>breakpoint</Word>
+      <Word>applies_to</Word>
+      <Word>action</Word>
+      <Word>pause</Word>
+      <Word>pin</Word>
+      <Word>dump</Word>
+      <Word>scope</Word>
+    </Keywords>
+
+    <!-- Variable / binding keywords -->
+    <Keywords color="Keyword">
+      <Word>let</Word>
+      <Word>const</Word>
+      <Word>var</Word>
+      <Word>use</Word>
+      <Word>state</Word>
+      <Word>log</Word>
+      <Word>metrics</Word>
+      <Word>health</Word>
+      <Word>alerts</Word>
+      <Word>parallel</Word>
+      <Word>branch</Word>
+      <Word>debug</Word>
+      <Word>degraded_semantics</Word>
+    </Keywords>
+
+    <!-- Modifiers -->
+    <Keywords color="Modifier">
+      <Word>async</Word>
+      <Word>sync</Word>
+    </Keywords>
+
+    <!-- Boolean / null literals -->
+    <Keywords color="BooleanNull">
+      <Word>true</Word>
+      <Word>false</Word>
+    </Keywords>
+
+    <!-- Logical keyword operators -->
+    <Keywords color="ControlFlow">
+      <Word>and</Word>
+      <Word>or</Word>
+      <Word>not</Word>
+    </Keywords>
+
+    <!-- Primitive types -->
+    <Keywords color="PrimitiveType">
+      <Word>i8</Word>
+      <Word>i16</Word>
+      <Word>i32</Word>
+      <Word>i64</Word>
+      <Word>u8</Word>
+      <Word>u16</Word>
+      <Word>u32</Word>
+      <Word>u64</Word>
+      <Word>f32</Word>
+      <Word>f64</Word>
+      <Word>Int</Word>
+      <Word>Float</Word>
+      <Word>Bool</Word>
+      <Word>Text</Word>
+      <Word>Symbol</Word>
+      <Word>Time</Word>
+      <Word>Duration</Word>
+      <Word>Map</Word>
+    </Keywords>
+
+    <!-- Trace policy constants -->
+    <Keywords color="NarrativeAttribute">
+      <Word>auto</Word>
+      <Word>minimal</Word>
+      <Word>causal</Word>
+      <Word>full</Word>
+    </Keywords>
+
+    <!-- ============ Function names / calls ============ -->
+    <!-- Identifier followed by ( — colors identifier + paren -->
+    <Rule color="FunctionName">
+      \b[A-Za-z_][A-Za-z0-9_]*\(
+    </Rule>
+
+    <!-- ============ Operators ============ -->
+
+    <!-- Pipeline operator |> -->
+    <Rule color="PipelineOp">
+      \|&gt;
+    </Rule>
+
+    <!-- Communication operators: -> <- <-> :: -->
+    <Rule color="CommunicationOp">
+      -&gt;|&lt;-|&lt;-&gt;|::
+    </Rule>
+
+    <!-- Match arm => -->
+    <Rule color="CommunicationOp">
+      =&gt;
+    </Rule>
+
+  </RuleSet>
+</SyntaxDefinition>

@@ -1,0 +1,105 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:host="clr-namespace:Junexis.Studio.Host;assembly=Junexis.Studio.Host"
+             x:DataType="host:WorkspaceSearchViewModel"
+             x:Class="Junexis.Studio.Shell.WorkspaceSearchView">
+    <Grid RowDefinitions="Auto,Auto,Auto,*"
+          Margin="2">
+        <Grid ColumnDefinitions="*,Auto,Auto">
+            <TextBox x:Name="QueryInput"
+                     Watermark="Search"
+                     Text="{Binding Query, Mode=TwoWay}"
+                     KeyDown="OnQueryKeyDown" />
+            <Button Grid.Column="1"
+                    Classes="subtle"
+                    Margin="4,0,0,0"
+                    ToolTip.Tip="Search"
+                    IsEnabled="{Binding !IsBusy}"
+                    AutomationProperties.Name="Search workspace"
+                    Click="OnSearchClick">
+                <PathIcon Classes="studio-icon"
+                          Data="{StaticResource StudioIconSearch}" />
+            </Button>
+            <Button Grid.Column="2"
+                    Classes="subtle"
+                    Margin="4,0,0,0"
+                    ToolTip.Tip="Cancel"
+                    IsEnabled="{Binding IsBusy}"
+                    AutomationProperties.Name="Cancel search"
+                    Click="OnCancelClick">
+                <PathIcon Classes="studio-icon"
+                          Data="{StaticResource StudioIconStop}" />
+            </Button>
+        </Grid>
+
+        <StackPanel Grid.Row="1"
+                    Margin="0,6,0,0"
+                    Spacing="4">
+            <TextBox Watermark="Files to include, e.g. *.jnx, src/**"
+                     Text="{Binding IncludePattern, Mode=TwoWay}" />
+            <TextBox Watermark="Files to exclude"
+                     Text="{Binding ExcludePattern, Mode=TwoWay}" />
+            <CheckBox Content="Match case"
+                      IsChecked="{Binding MatchCase}" />
+        </StackPanel>
+
+        <TextBlock Grid.Row="2"
+                   Text="{Binding StatusText}"
+                   Margin="2,7,2,5"
+                   FontSize="11"
+                   TextWrapping="Wrap"
+                   Foreground="{DynamicResource StudioMutedTextBrush}" />
+
+        <ScrollViewer Grid.Row="3">
+            <ItemsControl ItemsSource="{Binding Results}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate x:DataType="host:WorkspaceSearchFileGroup">
+                        <StackPanel Margin="0,2,0,8">
+                            <Grid ColumnDefinitions="*,Auto"
+                                  Margin="4,2">
+                                <TextBlock Text="{Binding RelativePath}"
+                                           FontWeight="SemiBold"
+                                           TextTrimming="CharacterEllipsis"
+                                           ToolTip.Tip="{Binding RelativePath}" />
+                                <Border Grid.Column="1"
+                                        Background="{DynamicResource StudioControlBackgroundBrush}"
+                                        CornerRadius="8"
+                                        Padding="6,1"
+                                        Margin="5,0,0,0">
+                                    <TextBlock Text="{Binding MatchCount}"
+                                               FontSize="11"
+                                               Foreground="{DynamicResource StudioMutedTextBrush}" />
+                                </Border>
+                            </Grid>
+                            <ItemsControl ItemsSource="{Binding Matches}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate x:DataType="host:WorkspaceSearchMatch">
+                                        <Button Tag="{Binding}"
+                                                Classes="search-result"
+                                                Click="OnResultClick"
+                                                ToolTip.Tip="{Binding Preview}">
+                                            <Grid ColumnDefinitions="Auto,*">
+                                                <TextBlock Text="{Binding Line}"
+                                                           Width="34"
+                                                           TextAlignment="Right"
+                                                           Margin="0,0,8,0"
+                                                           FontFamily="Consolas"
+                                                           FontSize="11"
+                                                           Foreground="{DynamicResource StudioSubtleTextBrush}" />
+                                                <TextBlock Grid.Column="1"
+                                                           Text="{Binding Preview}"
+                                                           FontFamily="Consolas"
+                                                           FontSize="11"
+                                                           TextTrimming="CharacterEllipsis" />
+                                            </Grid>
+                                        </Button>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </StackPanel>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+    </Grid>
+</UserControl>

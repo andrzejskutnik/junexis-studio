@@ -1,0 +1,74 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:Junexis.Studio.Shell"
+             xmlns:abs="clr-namespace:Junexis.Studio.Abstractions;assembly=Junexis.Studio.Abstractions"
+             x:Class="Junexis.Studio.Shell.TerminalPanelView">
+    <UserControl.Resources>
+        <local:OutputKindBrushConverter x:Key="OutputKindBrush" />
+    </UserControl.Resources>
+    <Grid RowDefinitions="*,Auto">
+        <!-- Output area -->
+        <ScrollViewer Grid.Row="0" x:Name="OutputScroll"
+                      HorizontalScrollBarVisibility="Auto"
+                      VerticalScrollBarVisibility="Auto"
+                      Padding="4">
+            <ItemsControl x:Name="OutputLines" Background="Transparent">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate x:DataType="abs:ProcessOutputLine">
+                        <TextBlock Text="{Binding Text}"
+                                   FontFamily="Consolas,Courier New,Monospace"
+                                   FontSize="12"
+                                   TextWrapping="NoWrap"
+                                   Foreground="{Binding Kind, Converter={StaticResource OutputKindBrush}}" />
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+
+        <!-- Input area: grows up to ~5 lines; Shift+Enter = newline, Enter = run -->
+        <Border Grid.Row="1"
+                BorderThickness="0,1,0,0"
+                BorderBrush="{DynamicResource StudioBorderBrush}"
+                Background="{DynamicResource StudioPanelBackgroundBrush}"
+                Padding="4,2">
+            <Grid ColumnDefinitions="Auto,*,Auto,Auto">
+                <TextBlock Grid.Column="0"
+                           Text="❯ "
+                           VerticalAlignment="Top"
+                           Margin="0,4,0,0"
+                           FontFamily="Consolas,Monospace"
+                           FontSize="12"
+                           Foreground="{DynamicResource StudioAccentBrush}" />
+                <TextBox Grid.Column="1"
+                         x:Name="CommandInput"
+                         FontFamily="Consolas,Courier New,Monospace"
+                         FontSize="12"
+                         Background="Transparent"
+                         BorderThickness="0"
+                         AcceptsReturn="True"
+                         TextWrapping="Wrap"
+                         MaxHeight="120"
+                         Watermark="enter command… (Shift+Enter = new line)"
+                         VerticalContentAlignment="Top" />
+                <Button Classes="subtle" Grid.Column="2"
+                        x:Name="RunButton"
+                        VerticalAlignment="Top"
+                        Margin="4,2,0,0"
+                        ToolTip.Tip="Run (Enter)"
+                        AutomationProperties.Name="Run terminal command">
+                    <PathIcon Classes="studio-icon"
+                              Data="{StaticResource StudioIconRun}" />
+                </Button>
+                <Button Classes="subtle" Grid.Column="3"
+                        x:Name="CancelButton"
+                        VerticalAlignment="Top"
+                        Margin="4,2,0,0"
+                        ToolTip.Tip="Cancel"
+                        AutomationProperties.Name="Cancel terminal command">
+                    <PathIcon Classes="studio-icon"
+                              Data="{StaticResource StudioIconClose}" />
+                </Button>
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>

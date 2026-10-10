@@ -1,0 +1,65 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:host="clr-namespace:Junexis.Studio.Host;assembly=Junexis.Studio.Host"
+        x:Class="Junexis.Studio.Shell.QuickAccessWindow"
+        Width="720"
+        Height="460"
+        MinWidth="520"
+        MinHeight="280"
+        WindowStartupLocation="CenterOwner"
+        ShowInTaskbar="False"
+        Title="Quick Access">
+    <Border Background="{DynamicResource StudioPopupBackgroundBrush}"
+            BorderBrush="{DynamicResource StudioControlBorderBrush}"
+            BorderThickness="1">
+        <Grid RowDefinitions="Auto,*,Auto">
+            <TextBox x:Name="QueryInput"
+                     Margin="10"
+                     FontSize="15"
+                     Watermark="Type to search..."
+                     TextChanged="OnQueryChanged"
+                     KeyDown="OnQueryKeyDown" />
+            <ListBox x:Name="ResultsList"
+                     Grid.Row="1"
+                     Margin="6,0"
+                     DoubleTapped="OnResultDoubleTapped"
+                     KeyDown="OnResultsKeyDown">
+                <ListBox.ItemTemplate>
+                    <DataTemplate x:DataType="host:QuickAccessItem">
+                        <Grid ColumnDefinitions="*,Auto"
+                              RowDefinitions="Auto,Auto"
+                              Margin="4,2">
+                            <TextBlock Text="{Binding Title}"
+                                       FontSize="14"
+                                       Foreground="{DynamicResource StudioTextBrush}"
+                                       TextTrimming="CharacterEllipsis" />
+                            <TextBlock Grid.Column="1"
+                                       Text="{Binding Shortcut}"
+                                       Margin="16,0,2,0"
+                                       FontSize="12"
+                                       Foreground="{DynamicResource StudioMutedTextBrush}" />
+                            <TextBlock Grid.Row="1"
+                                       Grid.ColumnSpan="2"
+                                       Text="{Binding Description}"
+                                       FontSize="12"
+                                       Foreground="{DynamicResource StudioMutedTextBrush}"
+                                       TextTrimming="CharacterEllipsis" />
+                        </Grid>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+            <Border Grid.Row="2"
+                    BorderBrush="{DynamicResource StudioBorderBrush}"
+                    BorderThickness="0,1,0,0"
+                    Padding="10,6">
+                <Grid ColumnDefinitions="*,Auto">
+                    <TextBlock x:Name="ResultCount"
+                               Classes="studio-caption" />
+                    <TextBlock Grid.Column="1"
+                               Classes="studio-caption"
+                               Text="↑↓ navigate   Enter open   Esc close" />
+                </Grid>
+            </Border>
+        </Grid>
+    </Border>
+</Window>

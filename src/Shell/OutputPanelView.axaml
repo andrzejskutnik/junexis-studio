@@ -1,0 +1,70 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:host="clr-namespace:Junexis.Studio.Host;assembly=Junexis.Studio.Host"
+             xmlns:abs="clr-namespace:Junexis.Studio.Abstractions;assembly=Junexis.Studio.Abstractions"
+             x:Class="Junexis.Studio.Shell.OutputPanelView"
+             x:DataType="host:OutputPanelViewModel">
+    <Grid RowDefinitions="Auto,*">
+
+        <!-- Toolbar: kanał + severity + Clear -->
+        <Border Grid.Row="0"
+                Background="{DynamicResource StudioPanelBackgroundBrush}"
+                BorderThickness="0,0,0,1"
+                BorderBrush="{DynamicResource StudioBorderBrush}"
+                Padding="5,3">
+            <StackPanel Orientation="Horizontal" Spacing="6">
+                <TextBlock Text="Kanał:" VerticalAlignment="Center" FontSize="12" />
+                <ComboBox x:Name="ChannelFilterBox"
+                          MinWidth="120"
+                          FontSize="12"
+                          SelectionChanged="OnChannelChanged" />
+                <TextBlock Text="Poziom:" VerticalAlignment="Center" FontSize="12" Margin="6,0,0,0" />
+                <ComboBox x:Name="SeverityFilterBox"
+                          MinWidth="95"
+                          FontSize="12"
+                          SelectionChanged="OnSeverityChanged" />
+                <Button x:Name="ClearButton"
+                        Content="Wyczyść"
+                        FontSize="12"
+                        Padding="8,2"
+                        Margin="6,0,0,0"
+                        Click="OnClearClick" />
+                <Button x:Name="CopyAllButton"
+                        Content="Kopiuj wszystko"
+                        FontSize="12"
+                        Padding="8,2"
+                        Margin="6,0,0,0"
+                        Click="OnCopyAllClick" />
+            </StackPanel>
+        </Border>
+
+        <!-- Lista wpisów -->
+        <ListBox Grid.Row="1"
+                 x:Name="EntriesList"
+                 Background="Transparent"
+                 ScrollViewer.HorizontalScrollBarVisibility="Auto">
+            <ListBox.ItemTemplate>
+                <DataTemplate x:DataType="abs:OutputEntry">
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <StackPanel.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Header="Kopiuj linię" Click="OnCopyLineClick" />
+                            </ContextMenu>
+                        </StackPanel.ContextMenu>
+                        <TextBlock Text="{Binding Timestamp, StringFormat={}{0:HH:mm:ss}}"
+                                   Foreground="{DynamicResource StudioSubtleTextBrush}" FontSize="11"
+                                   FontFamily="Consolas,Monospace" />
+                        <TextBlock Text="{Binding Channel}"
+                                   Foreground="{DynamicResource StudioAccentBrush}" FontSize="11"
+                                   MinWidth="70" />
+                        <TextBlock Text="{Binding Severity}"
+                                   FontSize="11" MinWidth="55" />
+                        <TextBlock Text="{Binding Message}"
+                                   FontSize="12" TextWrapping="Wrap" />
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
+    </Grid>
+</UserControl>

@@ -1,0 +1,34 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:host="clr-namespace:Junexis.Studio.Host;assembly=Junexis.Studio.Host"
+             xmlns:abstractions="clr-namespace:Junexis.Studio.Abstractions;assembly=Junexis.Studio.Abstractions"
+             x:DataType="host:ToolchainDoctorViewModel"
+             x:Class="Junexis.Studio.Shell.ToolchainDoctorView">
+    <Grid RowDefinitions="Auto,Auto,*" Margin="6">
+        <Grid Grid.Row="0" ColumnDefinitions="*,Auto" Margin="0,0,0,8">
+            <TextBlock Text="Toolchain Doctor" FontWeight="SemiBold" VerticalAlignment="Center" />
+            <Button Grid.Column="1" Content="Refresh" Click="Refresh_OnClick" IsEnabled="{Binding !IsBusy}" />
+        </Grid>
+        <TextBlock Grid.Row="1" Text="{Binding StatusText}" TextWrapping="Wrap" Margin="0,0,0,8" />
+        <ListBox Grid.Row="2" ItemsSource="{Binding Capabilities}">
+            <ListBox.ItemTemplate>
+                <DataTemplate x:DataType="abstractions:ToolchainCapability">
+                    <Border Padding="6" Margin="0,0,0,4" Classes="panel-card">
+                        <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto,Auto,Auto,Auto">
+                            <CheckBox Grid.RowSpan="5" IsChecked="{Binding IsAvailable}" IsEnabled="False"
+                                      VerticalAlignment="Top" Margin="0,2,7,0" />
+                            <TextBlock Grid.Column="1" Text="{Binding DisplayName}" FontWeight="SemiBold" />
+                            <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding Languages}" FontSize="11" />
+                            <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding Version}" FontSize="11"
+                                       TextWrapping="Wrap" />
+                            <TextBlock Grid.Row="3" Grid.Column="1" Text="{Binding Command, StringFormat=Command: {0}}"
+                                       FontSize="11" TextWrapping="Wrap" />
+                            <TextBlock Grid.Row="4" Grid.Column="1" Text="{Binding Diagnostic}" FontSize="11"
+                                       TextWrapping="Wrap" />
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+    </Grid>
+</UserControl>

@@ -1,0 +1,119 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:host="clr-namespace:Junexis.Studio.Host;assembly=Junexis.Studio.Host"
+             xmlns:abstractions="clr-namespace:Junexis.Studio.Abstractions;assembly=Junexis.Studio.Abstractions"
+             x:DataType="host:WorkbenchRunViewModel"
+             x:Class="Junexis.Studio.Shell.WorkbenchRunBarView">
+    <Border Classes="workbench-runbar">
+        <Grid ColumnDefinitions="Auto,Auto,*,156,170,Auto,Auto,Auto,Auto,Auto,Auto,Auto"
+              VerticalAlignment="Center">
+            <TextBlock Grid.Column="0"
+                       Classes="workbench-context"
+                       Text="{Binding WorkspaceName}"
+                       MaxWidth="125"
+                       ToolTip.Tip="{Binding WorkspaceName}" />
+            <TextBlock Grid.Column="1"
+                       Text="›"
+                       Foreground="{DynamicResource StudioMutedTextBrush}"
+                       Margin="5,0" />
+            <TextBlock Grid.Column="2"
+                       Classes="workbench-context"
+                       Text="{Binding ActiveFileName}"
+                       MaxWidth="150"
+                       ToolTip.Tip="{Binding ActiveFileName}" />
+
+            <ComboBox Grid.Column="3"
+                      Margin="6,0"
+                      Height="28"
+                      PlaceholderText="Select profile"
+                      ItemsSource="{Binding Profiles}"
+                      SelectedItem="{Binding SelectedProfile}">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate x:DataType="abstractions:LaunchProfile">
+                        <TextBlock Text="{Binding DisplayName}"
+                                   TextTrimming="CharacterEllipsis" />
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+
+            <TextBlock Grid.Column="4"
+                       Classes="workbench-status"
+                       Text="{Binding StatusText}"
+                       ToolTip.Tip="{Binding StatusText}" />
+
+            <Button Grid.Column="5"
+                    Classes="workbench-action"
+                    IsEnabled="{Binding CanBuild}"
+                    ToolTip.Tip="Build selected profile (F6)"
+                    AutomationProperties.Name="Build selected profile"
+                    Click="Build_OnClick">
+                <StackPanel Orientation="Horizontal" Spacing="5">
+                    <PathIcon Classes="studio-icon"
+                              Data="{StaticResource StudioIconBuild}" />
+                    <TextBlock Text="Build" />
+                </StackPanel>
+            </Button>
+            <Button Grid.Column="6"
+                    Classes="workbench-action primary"
+                    IsEnabled="{Binding CanRun}"
+                    ToolTip.Tip="Run selected profile (F5)"
+                    AutomationProperties.Name="Run selected profile"
+                    Click="Run_OnClick">
+                <StackPanel Orientation="Horizontal" Spacing="5">
+                    <PathIcon Classes="studio-icon"
+                              Data="{StaticResource StudioIconRun}" />
+                    <TextBlock Text="Run" />
+                </StackPanel>
+            </Button>
+            <Button Grid.Column="7"
+                    Classes="workbench-action"
+                    IsEnabled="{Binding CanDebug}"
+                    ToolTip.Tip="Debug selected profile (F7)"
+                    AutomationProperties.Name="Debug selected profile"
+                    Click="Debug_OnClick">
+                <StackPanel Orientation="Horizontal" Spacing="5">
+                    <PathIcon Classes="studio-icon"
+                              Data="{StaticResource StudioIconDebug}" />
+                    <TextBlock Text="Debug" />
+                </StackPanel>
+            </Button>
+            <Button Grid.Column="8"
+                    Classes="workbench-action"
+                    IsEnabled="{Binding CanStop}"
+                    ToolTip.Tip="Stop current build or run"
+                    AutomationProperties.Name="Stop current operation"
+                    Click="Stop_OnClick">
+                <PathIcon Classes="studio-icon"
+                          Data="{StaticResource StudioIconStop}" />
+            </Button>
+            <Button Grid.Column="9"
+                    Classes="workbench-action compact"
+                    ToolTip.Tip="Open Problems"
+                    AutomationProperties.Name="Open Problems"
+                    Click="Problems_OnClick">
+                <PathIcon Classes="studio-icon"
+                          Data="{StaticResource StudioIconProblems}" />
+            </Button>
+            <Button Grid.Column="10"
+                    Classes="workbench-action compact"
+                    ToolTip.Tip="Open Output"
+                    AutomationProperties.Name="Open Output"
+                    Click="Output_OnClick">
+                <PathIcon Classes="studio-icon"
+                          Data="{StaticResource StudioIconOutput}" />
+            </Button>
+            <Button Grid.Column="11"
+                    Classes="workbench-action narrative"
+                    IsEnabled="{Binding IsDebugStopped}"
+                    ToolTip.Tip="Explain the current stopped state"
+                    AutomationProperties.Name="Explain the current stopped state"
+                    Click="Why_OnClick">
+                <StackPanel Orientation="Horizontal" Spacing="5">
+                    <PathIcon Classes="studio-icon"
+                              Data="{StaticResource StudioIconWhy}" />
+                    <TextBlock Text="Why?" />
+                </StackPanel>
+            </Button>
+        </Grid>
+    </Border>
+</UserControl>

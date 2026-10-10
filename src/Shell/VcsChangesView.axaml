@@ -1,0 +1,125 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:host="clr-namespace:Junexis.Studio.Host;assembly=Junexis.Studio.Host"
+             xmlns:abs="clr-namespace:Junexis.Studio.Abstractions;assembly=Junexis.Studio.Abstractions"
+             x:DataType="host:VcsChangesViewModel"
+             x:Class="Junexis.Studio.Shell.VcsChangesView">
+    <Grid RowDefinitions="Auto,Auto,*,Auto,Auto" Margin="4">
+        <WrapPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,8">
+            <Button Classes="subtle" Content="Stage All" Click="OnStageAll" Padding="6,2" />
+            <Button Classes="subtle" Content="Unstage All" Click="OnUnstageAll" Padding="6,2" />
+            <Button Classes="subtle" Content="Stage selected" Click="OnStageSelected" Padding="6,2" />
+            <Button Classes="subtle" Content="Unstage selected" Click="OnUnstageSelected" Padding="6,2" />
+            <Button Classes="subtle" Content="Refresh" Click="OnRefresh" Padding="6,2" />
+        </WrapPanel>
+
+        <TextBlock Grid.Row="1"
+                   Text="{Binding RepositoryLabel}"
+                   FontWeight="SemiBold"
+                   TextWrapping="Wrap"
+                   Margin="0,0,0,8" />
+
+        <ScrollViewer Grid.Row="2">
+            <StackPanel Spacing="4">
+                <TextBlock Text="Conflicts" FontWeight="SemiBold" Foreground="#d16969" />
+                <ListBox x:Name="ConflictsList"
+                         ItemsSource="{Binding Conflicts}"
+                         DoubleTapped="OnConflictDoubleTap"
+                         MaxHeight="100">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate x:DataType="abs:VcsFileChange">
+                            <TextBlock Text="{Binding Path}" />
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+
+                <Grid ColumnDefinitions="*,Auto" Margin="0,6,0,0">
+                    <TextBlock Text="Staged" FontWeight="SemiBold" />
+                    <Button Classes="subtle" Grid.Column="1" Content="Diff staged" Click="OnDiffStaged" Padding="6,1" />
+                </Grid>
+                <ListBox x:Name="StagedList"
+                         ItemsSource="{Binding Staged}"
+                         SelectionMode="Multiple"
+                         DoubleTapped="OnStagedDoubleTap"
+                         MaxHeight="120">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate x:DataType="abs:VcsFileChange">
+                            <StackPanel Orientation="Horizontal" Spacing="6">
+                                <TextBlock Text="{Binding Status}" Foreground="#4ec9b0" Width="70" />
+                                <TextBlock Text="{Binding Path}" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+
+                <Grid ColumnDefinitions="*,Auto" Margin="0,6,0,0">
+                    <TextBlock Text="Changes" FontWeight="SemiBold" />
+                    <Button Classes="subtle" Grid.Column="1" Content="Diff change" Click="OnDiffChange" Padding="6,1" />
+                </Grid>
+                <ListBox x:Name="ChangesList"
+                         ItemsSource="{Binding Changes}"
+                         SelectionMode="Multiple"
+                         DoubleTapped="OnChangeDoubleTap"
+                         MaxHeight="120">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate x:DataType="abs:VcsFileChange">
+                            <StackPanel Orientation="Horizontal" Spacing="6">
+                                <TextBlock Text="{Binding Status}" Foreground="#ce9178" Width="70" />
+                                <TextBlock Text="{Binding Path}" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+
+                <TextBlock Text="Untracked" FontWeight="SemiBold" Margin="0,6,0,0" />
+                <ListBox x:Name="UntrackedList"
+                         ItemsSource="{Binding Untracked}"
+                         SelectionMode="Multiple"
+                         DoubleTapped="OnUntrackedDoubleTap"
+                         MaxHeight="100">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate x:DataType="abs:VcsFileChange">
+                            <TextBlock Text="{Binding Path}" />
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </StackPanel>
+        </ScrollViewer>
+
+        <StackPanel Grid.Row="3" Margin="0,8,0,0" Spacing="3">
+            <TextBlock Text="{Binding DiffTitle}" FontWeight="SemiBold" />
+            <TextBox Text="{Binding DiffPreview}"
+                     IsReadOnly="True"
+                     AcceptsReturn="True"
+                     FontFamily="Consolas"
+                     Height="130"
+                     TextWrapping="NoWrap"
+                     ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                     ScrollViewer.VerticalScrollBarVisibility="Auto" />
+        </StackPanel>
+
+        <StackPanel Grid.Row="4" Margin="0,8,0,0" Spacing="4">
+            <TextBlock Text="{Binding CommitSummary}"
+                       TextWrapping="Wrap"
+                       FontSize="11"
+                       Opacity="0.8" />
+            <TextBox x:Name="CommitMessageBox"
+                     Watermark="Commit message…"
+                     Text="{Binding CommitMessage}"
+                     AcceptsReturn="True"
+                     TextWrapping="Wrap"
+                     MinHeight="64" />
+            <Grid ColumnDefinitions="*,Auto">
+                <Button Classes="subtle" Content="{Binding CommitButtonLabel}"
+                        IsEnabled="{Binding CanCommit}"
+                        Click="OnCommit"
+                        HorizontalAlignment="Stretch" />
+                <Button Classes="subtle" Grid.Column="1"
+                        Content="Cancel"
+                        IsEnabled="{Binding CanCancelCommit}"
+                        Click="OnCancelCommit"
+                        Margin="4,0,0,0" />
+            </Grid>
+        </StackPanel>
+    </Grid>
+</UserControl>

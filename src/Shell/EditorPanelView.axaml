@@ -1,0 +1,187 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:host="clr-namespace:Junexis.Studio.Host;assembly=Junexis.Studio.Host"
+             xmlns:local="clr-namespace:Junexis.Studio.Shell"
+             x:DataType="host:EditorPanelViewModel"
+             x:Class="Junexis.Studio.Shell.EditorPanelView">
+    <UserControl.Resources>
+        <local:BoolToFontStyleConverter x:Key="BoolToFontStyleConverter" />
+    </UserControl.Resources>
+    <Grid Background="{DynamicResource StudioEditorBackgroundBrush}">
+        <!-- Start Center — pusty stan edytora -->
+        <ScrollViewer IsVisible="{Binding !HasOpenTabs}">
+            <Grid Margin="36"
+                  MaxWidth="760"
+                  HorizontalAlignment="Center"
+                  VerticalAlignment="Center"
+                  RowDefinitions="Auto,28,*">
+                <StackPanel>
+                    <TextBlock Text="Junexis Studio"
+                               FontSize="28"
+                               FontWeight="SemiBold"
+                               Foreground="{DynamicResource StudioTextBrush}" />
+                    <TextBlock Text="Code, evidence, and the story behind execution."
+                               Margin="0,5,0,0"
+                               FontSize="15"
+                               Foreground="{DynamicResource StudioMutedTextBrush}" />
+                </StackPanel>
+
+                <Grid Grid.Row="2"
+                      ColumnDefinitions="*,36,*">
+                    <StackPanel Spacing="4">
+                        <TextBlock Text="START"
+                                   Classes="studio-section"
+                                   Margin="2,0,0,8" />
+                        <Button Content="Open Folder..."
+                                Classes="welcome-link"
+                                Click="OnOpenFolderClick" />
+                        <Button Content="Clone Git Repository..."
+                                Classes="welcome-link"
+                                Click="OnCloneRepositoryClick" />
+                        <Button Content="Quick Open File"
+                                Classes="welcome-link"
+                                Click="OnQuickOpenClick" />
+                        <Button Content="Show Command Palette"
+                                Classes="welcome-link"
+                                Click="OnCommandPaletteClick" />
+
+                        <TextBlock Text="UNDERSTAND"
+                                   Classes="studio-section"
+                                   Margin="2,22,0,8" />
+                        <Button Content="Check Toolchains"
+                                Classes="welcome-link"
+                                Click="OnToolchainsClick" />
+                        <Button Content="Mentor &amp; Analysis"
+                                Classes="welcome-link"
+                                Click="OnAnalysisClick" />
+                        <Button Content="Narrative: Why?"
+                                Classes="welcome-link"
+                                Click="OnNarrativeClick" />
+                        <Button Content="Help Center"
+                                Classes="welcome-link"
+                                Click="OnHelpCenterClick" />
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="2"
+                                Spacing="5">
+                        <TextBlock Text="WORKSPACE"
+                                   Classes="studio-section"
+                                   Margin="2,0,0,8" />
+                        <Border Background="{DynamicResource StudioControlBackgroundBrush}"
+                                BorderBrush="{DynamicResource StudioBorderBrush}"
+                                BorderThickness="1"
+                                Padding="11,9"
+                                CornerRadius="3">
+                            <Grid ColumnDefinitions="Auto,*"
+                                  RowDefinitions="Auto,Auto">
+                                <Grid Grid.RowSpan="2"
+                                      Width="18"
+                                      Height="18"
+                                      Margin="0,1,9,0">
+                                    <PathIcon x:Name="WorkspaceFolderMarker"
+                                              Data="{StaticResource StudioIconExplorer}"
+                                              Foreground="{DynamicResource StudioAccentBrush}" />
+                                    <PathIcon x:Name="WorkspaceGitMarker"
+                                              Data="{StaticResource StudioIconSourceControl}"
+                                              Foreground="{DynamicResource StudioAccentBrush}"
+                                              IsVisible="False" />
+                                </Grid>
+                                <TextBlock x:Name="WorkspaceName"
+                                           Grid.Column="1"
+                                           FontWeight="SemiBold"
+                                           TextTrimming="CharacterEllipsis" />
+                                <TextBlock x:Name="WorkspacePath"
+                                           Grid.Row="1"
+                                           Grid.Column="1"
+                                           Margin="0,2,0,0"
+                                           FontSize="11"
+                                           Foreground="{DynamicResource StudioMutedTextBrush}"
+                                           TextWrapping="Wrap" />
+                            </Grid>
+                        </Border>
+
+                        <StackPanel x:Name="RecentSection"
+                                    Margin="0,18,0,0"
+                                    Spacing="5">
+                            <TextBlock Text="RECENT"
+                                       Classes="studio-section"
+                                       Margin="2,0,0,7" />
+                            <ItemsControl x:Name="RecentWorkspaces">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate x:DataType="host:RecentWorkspaceItem">
+                                        <Button Tag="{Binding FullPath}"
+                                                Classes="welcome-recent"
+                                                Click="OnOpenRecentClick"
+                                                ToolTip.Tip="{Binding FullPath}">
+                                            <Grid ColumnDefinitions="Auto,*"
+                                                  RowDefinitions="Auto,Auto">
+                                                <PathIcon Grid.RowSpan="2"
+                                                          Width="15"
+                                                          Height="15"
+                                                          Margin="0,2,9,0"
+                                                          Data="{StaticResource StudioIconExplorer}"
+                                                          Foreground="{DynamicResource StudioAccentBrush}" />
+                                                <TextBlock Grid.Column="1"
+                                                           Text="{Binding DisplayName}"
+                                                           TextTrimming="CharacterEllipsis" />
+                                                <TextBlock Grid.Row="1"
+                                                           Grid.Column="1"
+                                                           Text="{Binding FullPath}"
+                                                           FontSize="11"
+                                                           Foreground="{DynamicResource StudioMutedTextBrush}"
+                                                           TextTrimming="CharacterEllipsis" />
+                                            </Grid>
+                                        </Button>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </StackPanel>
+                    </StackPanel>
+                </Grid>
+            </Grid>
+        </ScrollViewer>
+        <!-- TabControl z zakładkami dokumentów -->
+        <TabControl ItemsSource="{Binding Tabs}"
+                    SelectedItem="{Binding ActiveTab}"
+                    IsVisible="{Binding HasOpenTabs}">
+            <TabControl.ItemTemplate>
+                <DataTemplate x:DataType="host:DocumentTabViewModel">
+                    <StackPanel Orientation="Horizontal" Spacing="4">
+                        <StackPanel.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Header="Close" Click="OnCloseTabClick" />
+                                <MenuItem Header="Close Others" Click="OnCloseOtherTabsClick" />
+                                <MenuItem Header="Close to the Right" Click="OnCloseTabsToRightClick" />
+                                <Separator />
+                                <MenuItem Header="Copy Path" Click="OnCopyTabPathClick" />
+                            </ContextMenu>
+                        </StackPanel.ContextMenu>
+                        <TextBlock Text="{Binding FileName}" VerticalAlignment="Center"
+                                   FontStyle="{Binding IsPreview, Converter={x:Static local:BoolToFontStyleConverter.Instance}}" />
+                        <TextBlock Text="*" IsVisible="{Binding IsDirty}"
+                                   VerticalAlignment="Center" Foreground="#D7BA7D" />
+                        <Button Click="OnCloseTabClick"
+                                Padding="2"
+                                MinWidth="18" MinHeight="18"
+                                VerticalAlignment="Center"
+                                Background="Transparent"
+                                Foreground="{DynamicResource StudioMutedTextBrush}"
+                                BorderThickness="0"
+                                Cursor="Hand"
+                                ToolTip.Tip="Close editor"
+                                AutomationProperties.Name="Close editor">
+                            <PathIcon Width="10"
+                                      Height="10"
+                                      Data="{StaticResource StudioIconClose}" />
+                        </Button>
+                    </StackPanel>
+                </DataTemplate>
+            </TabControl.ItemTemplate>
+            <TabControl.ContentTemplate>
+                <DataTemplate x:DataType="host:DocumentTabViewModel">
+                    <local:DocumentTabView />
+                </DataTemplate>
+            </TabControl.ContentTemplate>
+        </TabControl>
+    </Grid>
+</UserControl>

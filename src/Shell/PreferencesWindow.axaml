@@ -1,0 +1,116 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:host="clr-namespace:Junexis.Studio.Host;assembly=Junexis.Studio.Host"
+        x:Class="Junexis.Studio.Shell.PreferencesWindow"
+        x:DataType="host:PreferencesViewModel"
+        Title="{Binding Title}"
+        Width="560" Height="480"
+        MinWidth="440" MinHeight="360"
+        WindowStartupLocation="CenterOwner"
+        CanResize="True">
+    <Grid RowDefinitions="*,Auto" Margin="16">
+        <TabControl Grid.Row="0">
+
+            <!-- ── Appearance ── -->
+            <TabItem Header="Appearance">
+                <StackPanel Margin="12,16,12,8" Spacing="14">
+                    <Grid ColumnDefinitions="180,*">
+                        <TextBlock Grid.Column="0" Text="Theme" VerticalAlignment="Center" />
+                        <ComboBox Grid.Column="1"
+                                  SelectedItem="{Binding Theme, Mode=TwoWay}"
+                                  MinWidth="160">
+                            <ComboBoxItem>Dark</ComboBoxItem>
+                            <ComboBoxItem>Light</ComboBoxItem>
+                        </ComboBox>
+                    </Grid>
+                </StackPanel>
+            </TabItem>
+
+            <!-- ── Editor ── -->
+            <TabItem Header="Editor">
+                <StackPanel Margin="12,16,12,8" Spacing="14">
+                    <Grid ColumnDefinitions="180,*">
+                        <TextBlock Grid.Column="0" Text="Font Family" VerticalAlignment="Center" />
+                        <TextBox Grid.Column="1"
+                                 Text="{Binding EditorFontFamily, Mode=TwoWay}"
+                                 Watermark="e.g. Cascadia Code, Consolas" />
+                    </Grid>
+                    <Grid ColumnDefinitions="180,*">
+                        <TextBlock Grid.Column="0" Text="Font Size" VerticalAlignment="Center" />
+                        <NumericUpDown Grid.Column="1"
+                                       Value="{Binding EditorFontSize, Mode=TwoWay}"
+                                       Minimum="8" Maximum="40" Increment="1"
+                                       FormatString="0"
+                                       MinWidth="100" MaxWidth="140" HorizontalAlignment="Left" />
+                    </Grid>
+                    <Grid ColumnDefinitions="180,*">
+                        <TextBlock Grid.Column="0" Text="Tab Size" VerticalAlignment="Center" />
+                        <NumericUpDown Grid.Column="1"
+                                       Value="{Binding EditorTabSize, Mode=TwoWay}"
+                                       Minimum="1" Maximum="16" Increment="1"
+                                       FormatString="0"
+                                       MinWidth="100" MaxWidth="140" HorizontalAlignment="Left" />
+                    </Grid>
+                    <CheckBox Content="Word Wrap"
+                              IsChecked="{Binding EditorWordWrap, Mode=TwoWay}" />
+                    <CheckBox Content="Auto Save on change"
+                              IsChecked="{Binding EditorAutoSave, Mode=TwoWay}" />
+                    <CheckBox Content="Show Line Numbers"
+                              IsChecked="{Binding EditorShowLineNumbers, Mode=TwoWay}" />
+                </StackPanel>
+            </TabItem>
+
+            <!-- ── Build ── -->
+            <TabItem Header="Build">
+                <StackPanel Margin="12,16,12,8" Spacing="14">
+                    <CheckBox Content="Auto Build on file save"
+                              IsChecked="{Binding AutoBuildEnabled, Mode=TwoWay}" />
+                    <Grid ColumnDefinitions="180,*">
+                        <TextBlock Grid.Column="0" Text="Auto Build delay (ms)"
+                                   VerticalAlignment="Center"
+                                   Foreground="{DynamicResource StudioMutedTextBrush}" />
+                        <NumericUpDown Grid.Column="1"
+                                       Value="{Binding AutoBuildDebounceMs, Mode=TwoWay}"
+                                       Minimum="100" Maximum="5000" Increment="100"
+                                       FormatString="0"
+                                       MinWidth="120" MaxWidth="160" HorizontalAlignment="Left" />
+                    </Grid>
+                </StackPanel>
+            </TabItem>
+
+            <!-- ── Mentor ── -->
+            <TabItem Header="Mentor">
+                <StackPanel Margin="12,16,12,8" Spacing="14">
+                    <Grid ColumnDefinitions="180,*">
+                        <TextBlock Grid.Column="0" Text="Presence mode" VerticalAlignment="Center" />
+                        <ComboBox Grid.Column="1"
+                                  ItemsSource="{Binding MentorPresenceModes}"
+                                  SelectedItem="{Binding MentorPresenceString, Mode=TwoWay}"
+                                  MinWidth="160" />
+                    </Grid>
+                    <TextBlock TextWrapping="Wrap"
+                               Foreground="{DynamicResource StudioMutedTextBrush}"
+                               FontSize="12"
+                               Text="Quiet — shows analysis only in dedicated panel.&#10;Balanced — concise analysis at decision points.&#10;Teaching — adds educational context to each finding." />
+                </StackPanel>
+            </TabItem>
+
+        </TabControl>
+
+        <!-- Przyciski -->
+        <StackPanel Grid.Row="1"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Right"
+                    Margin="0,12,0,0"
+                    Spacing="8">
+            <Button Content="Save"
+                    x:Name="SaveButton"
+                    Click="OnSaveClicked"
+                    IsDefault="True" />
+            <Button Content="Cancel"
+                    x:Name="CancelButton"
+                    Click="OnCancelClicked"
+                    IsCancel="True" />
+        </StackPanel>
+    </Grid>
+</Window>

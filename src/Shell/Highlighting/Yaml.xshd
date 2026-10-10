@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  YAML syntax highlighting definition for AvaloniaEdit (dark theme).
+  Covers keys, values, strings, comments, booleans, numbers, anchors, tags, etc.
+-->
+<SyntaxDefinition name="YAML" extensions=".yml;.yaml"
+                  xmlns="http://icsharpcode.net/sharpdevelop/syntaxdefinition/2008">
+
+  <Color name="Comment"    foreground="#6A9955" fontStyle="italic" />
+  <Color name="Key"        foreground="#9CDCFE" />
+  <Color name="String"     foreground="#CE9178" />
+  <Color name="Number"     foreground="#B5CEA8" />
+  <Color name="Boolean"    foreground="#569CD6" fontWeight="bold" />
+  <Color name="Null"       foreground="#569CD6" fontStyle="italic" />
+  <Color name="Anchor"     foreground="#D7BA7D" />
+  <Color name="Tag"        foreground="#4EC9B0" />
+  <Color name="Directive"  foreground="#C586C0" />
+  <Color name="Separator"  foreground="#D4D4D4" />
+
+  <RuleSet>
+    <!-- Comments: # to end of line -->
+    <Span color="Comment">
+      <Begin>\#</Begin>
+    </Span>
+
+    <!-- Directives: %YAML, %TAG -->
+    <Rule color="Directive">
+      ^%[A-Za-z]+
+    </Rule>
+
+    <!-- Document separators -->
+    <Rule color="Separator">
+      ^(---|\.\.\.)$
+    </Rule>
+
+    <!-- Double-quoted strings -->
+    <Span color="String">
+      <Begin>"</Begin>
+      <End>"</End>
+      <RuleSet>
+        <Rule color="String">
+          \\[\\/"bfnrtu]
+        </Rule>
+      </RuleSet>
+    </Span>
+
+    <!-- Single-quoted strings -->
+    <Span color="String">
+      <Begin>'</Begin>
+      <End>'</End>
+    </Span>
+
+    <!-- Anchors &amp; Aliases: &amp;name, *name -->
+    <Rule color="Anchor">
+      [&amp;\*][A-Za-z_][A-Za-z0-9_]*
+    </Rule>
+
+    <!-- Tags: !!str, !custom, !!int -->
+    <Rule color="Tag">
+      ![!]?[A-Za-z][A-Za-z0-9_\-]*
+    </Rule>
+
+    <!-- Booleans -->
+    <Keywords color="Boolean">
+      <Word>true</Word>
+      <Word>false</Word>
+      <Word>True</Word>
+      <Word>False</Word>
+      <Word>TRUE</Word>
+      <Word>FALSE</Word>
+      <Word>yes</Word>
+      <Word>no</Word>
+      <Word>Yes</Word>
+      <Word>No</Word>
+      <Word>YES</Word>
+      <Word>NO</Word>
+      <Word>on</Word>
+      <Word>off</Word>
+      <Word>On</Word>
+      <Word>Off</Word>
+      <Word>ON</Word>
+      <Word>OFF</Word>
+    </Keywords>
+
+    <!-- Null values -->
+    <Keywords color="Null">
+      <Word>null</Word>
+      <Word>Null</Word>
+      <Word>NULL</Word>
+      <Word>~</Word>
+    </Keywords>
+
+    <!-- Numbers: integers, floats, hex, octal, infinity, NaN -->
+    <Rule color="Number">
+      \b[-+]?0x[0-9A-Fa-f]+\b
+    </Rule>
+    <Rule color="Number">
+      \b[-+]?0o[0-7]+\b
+    </Rule>
+    <Rule color="Number">
+      \b[-+]?[0-9]+(\.[0-9]+)?([eE][-+]?[0-9]+)?\b
+    </Rule>
+    <Rule color="Number">
+      \b[-+]?\.(inf|Inf|INF)\b
+    </Rule>
+    <Rule color="Number">
+      \b\.(nan|NaN|NAN)\b
+    </Rule>
+
+    <!-- Keys: word followed by colon (must be before other rules consume the text) -->
+    <Rule color="Key">
+      ^[\s]*[A-Za-z_][A-Za-z0-9_\s\-]*(?=\s*:)
+    </Rule>
+
+  </RuleSet>
+</SyntaxDefinition>

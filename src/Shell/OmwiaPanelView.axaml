@@ -1,0 +1,34 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:host="clr-namespace:Junexis.Studio.Host;assembly=Junexis.Studio.Host"
+             x:DataType="host:OmwiaPanelViewModel"
+             x:Class="Junexis.Studio.Shell.OmwiaPanelView">
+    <Grid RowDefinitions="Auto,*" Margin="4">
+        <TextBlock Grid.Row="0" Text="OMWiA — Suggestions" FontWeight="SemiBold" Margin="0,0,0,6" />
+
+        <ListBox Grid.Row="1"
+                 x:Name="SuggestionsList"
+                 ItemsSource="{Binding Suggestions}">
+            <ListBox.ItemTemplate>
+                <DataTemplate x:DataType="host:OmwiaSuggestion">
+                    <Grid RowDefinitions="Auto,Auto" Margin="0,2">
+                        <StackPanel Grid.Row="0" Orientation="Horizontal" Spacing="8">
+                            <TextBlock Text="{Binding Category}"
+                                       FontWeight="SemiBold"
+                                       Foreground="#4ec9b0"
+                                       FontSize="11" />
+                            <TextBlock Text="{Binding TimestampUtc}"
+                                       Foreground="#888"
+                                       FontSize="10"
+                                       VerticalAlignment="Center" />
+                        </StackPanel>
+                        <TextBlock Grid.Row="1"
+                                   Text="{Binding Message}"
+                                   TextWrapping="Wrap"
+                                   FontSize="12" />
+                    </Grid>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+    </Grid>
+</UserControl>

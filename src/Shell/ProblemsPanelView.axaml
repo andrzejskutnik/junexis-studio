@@ -1,0 +1,52 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:host="clr-namespace:Junexis.Studio.Host;assembly=Junexis.Studio.Host"
+             x:DataType="host:ProblemsPanelViewModel"
+             x:Class="Junexis.Studio.Shell.ProblemsPanelView">
+    <Grid RowDefinitions="Auto,*,Auto" Margin="0">
+        <TextBlock Grid.Row="0" Text="Problems" />
+
+        <ListBox Grid.Row="1"
+                 x:Name="ProblemsList"
+                 ItemsSource="{Binding Items}"
+                 SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
+                 DoubleTapped="OnProblemDoubleTapped">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <TextBlock Text="{Binding Diagnostic.Severity}" />
+                        <TextBlock Text="{Binding Diagnostic.Code}" />
+                        <TextBlock Text="{Binding Diagnostic.Message}" />
+                        <TextBlock Text="{Binding Diagnostic.FilePath}" />
+                        <TextBlock Text=":" />
+                        <TextBlock Text="{Binding Diagnostic.Line}" />
+                        <TextBlock Text=":" />
+                        <TextBlock Text="{Binding Diagnostic.Column}" />
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
+        <Border Grid.Row="2"
+                IsVisible="{Binding HasSelectedMentorContext}"
+                Margin="8,4,8,8"
+                Padding="10,7"
+                BorderThickness="2,0,0,0"
+                BorderBrush="{DynamicResource StudioAccentBrush}"
+                Background="#0DFFFFFF">
+            <StackPanel Spacing="3">
+                <TextBlock Text="{Binding SelectedMentorLabel}"
+                           FontWeight="SemiBold" />
+                <TextBlock Text="{Binding SelectedMentorEvidence}"
+                           Opacity="0.72" />
+                <TextBlock Text="{Binding SelectedMentorExplanation}"
+                           TextWrapping="Wrap" />
+                <TextBlock Text="{Binding SelectedMentorNextStep}"
+                           TextWrapping="Wrap" />
+                <Button Classes="subtle" Content="Open full Mentor report"
+                        HorizontalAlignment="Left"
+                        Click="OnOpenMentorReportClick" />
+            </StackPanel>
+        </Border>
+    </Grid>
+</UserControl>

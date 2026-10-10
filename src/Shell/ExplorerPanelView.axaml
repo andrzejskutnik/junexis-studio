@@ -1,0 +1,111 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:host="clr-namespace:Junexis.Studio.Host;assembly=Junexis.Studio.Host"
+             x:DataType="host:ExplorerPanelViewModel"
+             x:Class="Junexis.Studio.Shell.ExplorerPanelView">
+    <Grid Background="{DynamicResource StudioSideBackgroundBrush}">
+        <TreeView x:Name="Tree"
+                  IsVisible="{Binding HasOpenFolder}"
+                  Background="{DynamicResource StudioSideBackgroundBrush}"
+                  ItemsSource="{Binding Nodes}"
+                  SelectedItem="{Binding SelectedNode, Mode=TwoWay}"
+                  Tapped="OnTreeTapped"
+                  DoubleTapped="OnTreeDoubleTapped"
+                  KeyDown="OnTreeKeyDown">
+            <TreeView.Styles>
+                <Style Selector="TreeViewItem">
+                    <Setter Property="IsExpanded" Value="{ReflectionBinding IsExpanded, Mode=TwoWay}" />
+                </Style>
+            </TreeView.Styles>
+            <TreeView.ItemTemplate>
+                <TreeDataTemplate x:DataType="host:ExplorerNode" ItemsSource="{Binding Children}">
+                    <StackPanel Orientation="Horizontal" Spacing="5">
+                        <Grid Width="12.5" Height="12.5">
+                            <PathIcon IsVisible="{Binding IsDirectory}"
+                                      Data="{StaticResource StudioIconExplorer}"
+                                      Foreground="{DynamicResource StudioMutedTextBrush}" />
+                            <PathIcon IsVisible="{Binding IsJunexisSource}"
+                                      Data="{StaticResource StudioIconLogo}"
+                                      Foreground="{Binding FileIconColor, TargetNullValue={DynamicResource StudioMutedTextBrush}}" />
+                            <PathIcon IsVisible="{Binding IsGenericFile}"
+                                      Data="{StaticResource StudioIconFile}"
+                                      Foreground="{Binding FileIconColor, TargetNullValue={DynamicResource StudioMutedTextBrush}}" />
+                        </Grid>
+                        <TextBlock Text="{Binding DisplayName}"
+                                   VerticalAlignment="Center"
+                                   ToolTip.Tip="{Binding FullPath}" />
+                    </StackPanel>
+                </TreeDataTemplate>
+            </TreeView.ItemTemplate>
+        </TreeView>
+
+        <StackPanel IsVisible="{Binding IsEmptyWorkspace}"
+                    Margin="20"
+                    Spacing="12"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Center">
+            <PathIcon Width="32"
+                      Height="32"
+                      HorizontalAlignment="Center"
+                      Data="{StaticResource StudioIconLogo}"
+                      Foreground="{DynamicResource StudioAccentBrush}" />
+            <TextBlock Text="Junexis Studio"
+                       FontSize="18"
+                       FontWeight="SemiBold"
+                       HorizontalAlignment="Center"
+                       Foreground="{DynamicResource StudioTextBrush}" />
+            <TextBlock Text="Otwórz projekt lub rozpocznij pracę z repozytorium."
+                       TextWrapping="Wrap"
+                       TextAlignment="Center"
+                       Foreground="{DynamicResource StudioMutedTextBrush}" />
+            <Button Content="Otwórz folder"
+                    HorizontalAlignment="Stretch"
+                    HorizontalContentAlignment="Center"
+                    Click="OnOpenFolderClick" />
+            <Button Content="Klonuj repozytorium"
+                    HorizontalAlignment="Stretch"
+                    HorizontalContentAlignment="Center"
+                    Click="OnCloneRepositoryClick" />
+
+            <StackPanel IsVisible="{Binding HasRecentWorkspaces}"
+                        Margin="0,10,0,0"
+                        Spacing="6">
+                <TextBlock Text="OSTATNIO OTWIERANE"
+                           Classes="caption" />
+                <ItemsControl ItemsSource="{Binding RecentWorkspaces}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate x:DataType="host:RecentWorkspaceItem">
+                            <Button Tag="{Binding FullPath}"
+                                    Click="OnOpenRecentClick"
+                                    HorizontalContentAlignment="Stretch"
+                                    Padding="8,6"
+                                    Margin="0,1">
+                                <Grid ColumnDefinitions="Auto,*"
+                                      RowDefinitions="Auto,Auto"
+                                      ColumnSpacing="7">
+                                    <PathIcon Grid.RowSpan="2"
+                                              Width="15"
+                                              Height="15"
+                                              VerticalAlignment="Center"
+                                              Data="{StaticResource StudioIconExplorer}"
+                                              Foreground="{DynamicResource StudioAccentBrush}" />
+                                    <TextBlock Grid.Column="1"
+                                               Text="{Binding DisplayName}"
+                                               FontWeight="SemiBold"
+                                               TextTrimming="CharacterEllipsis" />
+                                    <TextBlock Grid.Row="1"
+                                               Grid.Column="1"
+                                               Text="{Binding FullPath}"
+                                               FontSize="11"
+                                               Foreground="{DynamicResource StudioMutedTextBrush}"
+                                               TextTrimming="CharacterEllipsis"
+                                               ToolTip.Tip="{Binding FullPath}" />
+                                </Grid>
+                            </Button>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</UserControl>

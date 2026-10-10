@@ -1,0 +1,48 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:abs="clr-namespace:Junexis.Studio.Abstractions;assembly=Junexis.Studio.Abstractions"
+             x:Class="Junexis.Studio.Shell.OmwiaChatView">
+    <Grid RowDefinitions="*,Auto" Margin="4">
+
+        <!-- Historia wiadomości -->
+        <ScrollViewer Grid.Row="0"
+                      x:Name="MessagesScroll"
+                      VerticalScrollBarVisibility="Auto">
+            <ListBox x:Name="MessagesList"
+                     Background="Transparent"
+                     SelectionMode="Single">
+                <ListBox.ItemTemplate>
+                    <DataTemplate x:DataType="abs:AssistantMessage">
+                        <Grid ColumnDefinitions="80,*" Margin="0,4">
+                            <TextBlock Grid.Column="0"
+                                       Text="{Binding Role}"
+                                       FontWeight="SemiBold"
+                                       FontSize="11"
+                                       VerticalAlignment="Top"
+                                       Margin="0,1,6,0" />
+                            <TextBlock Grid.Column="1"
+                                       Text="{Binding Content}"
+                                       TextWrapping="Wrap"
+                                       FontSize="12" />
+                        </Grid>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </ScrollViewer>
+
+        <!-- Pole wejściowe -->
+        <Grid Grid.Row="1" ColumnDefinitions="*,Auto" Margin="0,6,0,0">
+            <TextBox x:Name="InputBox"
+                     Grid.Column="0"
+                     Watermark="Wpisz wiadomość…"
+                     AcceptsReturn="False"
+                     KeyDown="OnInputKeyDown" />
+            <Button Classes="subtle" Grid.Column="1"
+                    x:Name="SendButton"
+                    Content="Wyślij"
+                    Margin="4,0,0,0"
+                    Click="OnSendClick" />
+        </Grid>
+
+    </Grid>
+</UserControl>

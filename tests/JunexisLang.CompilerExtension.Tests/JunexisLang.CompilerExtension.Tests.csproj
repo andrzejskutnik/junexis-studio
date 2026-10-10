@@ -1,0 +1,31 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <IsPackable>false</IsPackable>
+    <RootNamespace>JunexisLang.Studio.CompilerExtension.Tests</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="coverlet.collector" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="xunit" />
+    <PackageReference Include="xunit.runner.visualstudio" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Using Include="Xunit" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\extensions\JunexisLang.CompilerExtension\JunexisLang.CompilerExtension.csproj" />
+    <ProjectReference Include="..\..\src\Abstractions\Junexis.Studio.Abstractions.csproj" />
+    <ProjectReference Include="..\..\src\Core\Junexis.Studio.Core.csproj" />
+    <ProjectReference Include="..\..\src\Host\Junexis.Studio.Host.csproj" />
+    <ProjectReference Include="..\..\..\junexis-observability\src\Junexis.Observability.Contracts\Junexis.Observability.Contracts.csproj" />
+    <ProjectReference Include="..\..\..\junexis-observability\src\Junexis.Observability.Ingress\Junexis.Observability.Ingress.csproj" />
+  </ItemGroup>
+
+</Project>

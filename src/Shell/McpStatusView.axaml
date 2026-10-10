@@ -1,0 +1,41 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:host="clr-namespace:Junexis.Studio.Host;assembly=Junexis.Studio.Host"
+             x:DataType="host:McpStatusViewModel"
+             x:Class="Junexis.Studio.Shell.McpStatusView">
+    <Grid RowDefinitions="Auto,Auto,*" Margin="4">
+        <!-- Connection status -->
+        <StackPanel Grid.Row="0" Orientation="Horizontal" Spacing="8" Margin="0,0,0,6">
+            <TextBlock Classes="field-label" Text="Active connector:" VerticalAlignment="Center" />
+            <TextBlock Classes="field-value" Text="{Binding ActiveConnectorId}" VerticalAlignment="Center" />
+        </StackPanel>
+
+        <!-- Header row -->
+        <TextBlock Grid.Row="1" Text="Communication Log" FontWeight="SemiBold" Margin="0,0,0,4" />
+
+        <!-- Log list -->
+        <ListBox Grid.Row="2"
+                 x:Name="LogList"
+                 ItemsSource="{Binding Log}">
+            <ListBox.ItemTemplate>
+                <DataTemplate x:DataType="host:McpLogEntry">
+                    <Grid ColumnDefinitions="140,80,*">
+                        <TextBlock Grid.Column="0"
+                                   Text="{Binding TimestampUtc}"
+                                   FontFamily="Consolas,Monospace"
+                                   FontSize="11"
+                                   Foreground="#888" />
+                        <TextBlock Grid.Column="1"
+                                   Text="{Binding Kind}"
+                                   FontSize="11"
+                                   FontWeight="SemiBold" />
+                        <TextBlock Grid.Column="2"
+                                   Text="{Binding Detail}"
+                                   FontSize="11"
+                                   TextTrimming="CharacterEllipsis" />
+                    </Grid>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+    </Grid>
+</UserControl>

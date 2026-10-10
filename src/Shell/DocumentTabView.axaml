@@ -1,0 +1,33 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:host="clr-namespace:Junexis.Studio.Host;assembly=Junexis.Studio.Host"
+             xmlns:edit="clr-namespace:AvaloniaEdit;assembly=AvaloniaEdit"
+             x:DataType="host:DocumentTabViewModel"
+             x:Class="Junexis.Studio.Shell.DocumentTabView">
+    <Grid RowDefinitions="Auto,*"
+          Background="{DynamicResource StudioEditorBackgroundBrush}">
+        <Border Grid.Row="0"
+                Background="{DynamicResource StudioTabBackgroundBrush}"
+                BorderBrush="{DynamicResource StudioBorderBrush}"
+                BorderThickness="0,0,0,1"
+                Padding="7,3">
+        <StackPanel Orientation="Horizontal" Spacing="8">
+            <TextBlock Text="{Binding FilePath}" VerticalAlignment="Center"
+                       Foreground="{DynamicResource StudioMutedTextBrush}" FontSize="12" />
+            <Button Content="Save" IsEnabled="{Binding IsDirty}" Click="OnSaveClick"
+                    Padding="6,2" FontSize="12" />
+        </StackPanel>
+        </Border>
+        <edit:TextEditor Grid.Row="1"
+                         x:Name="EditorTextBox"
+                         Background="{DynamicResource StudioEditorBackgroundBrush}"
+                         Foreground="{DynamicResource StudioTextBrush}"
+                         BorderThickness="0"
+                         ShowLineNumbers="True"
+                         FontFamily="Cascadia Code,Consolas,Menlo,monospace"
+                         FontSize="14"
+                         WordWrap="False"
+                         HorizontalScrollBarVisibility="Auto"
+                         VerticalScrollBarVisibility="Auto" />
+    </Grid>
+</UserControl>

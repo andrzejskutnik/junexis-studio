@@ -1,0 +1,295 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:host="clr-namespace:Junexis.Studio.Host;assembly=Junexis.Studio.Host"
+             xmlns:abstractions="clr-namespace:Junexis.Studio.Abstractions;assembly=Junexis.Studio.Abstractions"
+             x:DataType="host:DebugPanelViewModel"
+             x:Class="Junexis.Studio.Shell.DebugPanelView">
+    <Grid RowDefinitions="Auto,*" Margin="4">
+        <WrapPanel Grid.Row="0" Margin="0,0,0,4">
+            <Button Classes="subtle" Content="Continue" Click="Continue_OnClick" Margin="0,0,4,4" />
+            <Button Classes="subtle" Content="Pause" Click="Pause_OnClick" Margin="0,0,4,4" />
+            <Button Classes="subtle" Content="Over" Click="Next_OnClick" Margin="0,0,4,4" />
+            <Button Classes="subtle" Content="Into" Click="StepIn_OnClick" Margin="0,0,4,4" />
+            <Button Classes="subtle" Content="Out" Click="StepOut_OnClick" Margin="0,0,4,4" />
+            <Button Classes="subtle" Content="Stop" Click="Stop_OnClick" Margin="0,0,4,4" />
+            <Button Classes="subtle" Content="Why?" Click="ExplainStoppedFrame_OnClick" Margin="0,0,4,4" />
+            <TextBlock Text="{Binding Snapshot.Status}"
+                       Classes="studio-caption"
+                       VerticalAlignment="Center"
+                       Margin="4,0,0,4" />
+        </WrapPanel>
+
+        <TabControl Grid.Row="1">
+            <TabItem Header="Launch">
+                <ScrollViewer>
+                    <StackPanel Spacing="6" Margin="3">
+                        <TextBlock Text="CONFIGURATION" Classes="studio-section" />
+                        <ComboBox ItemsSource="{Binding Configurations}"
+                                  SelectedItem="{Binding SelectedConfiguration, Mode=TwoWay}">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate x:DataType="abstractions:DebugLaunchConfiguration">
+                                    <TextBlock Text="{Binding Name}" />
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+                        <WrapPanel>
+                            <Button Classes="subtle" Content="Start" Click="StartConfiguration_OnClick" Margin="0,0,4,4" />
+                            <Button Classes="subtle" Content="New" Click="NewConfiguration_OnClick" Margin="0,0,4,4" />
+                            <Button Classes="subtle" Content="Save" Click="SaveConfiguration_OnClick" Margin="0,0,4,4" />
+                            <Button Classes="subtle" Content="Remove" Click="RemoveConfiguration_OnClick" Margin="0,0,4,4" />
+                        </WrapPanel>
+
+                        <TextBlock Text="PROCESS" Classes="studio-section" Margin="0,4,0,0" />
+                        <ComboBox ItemsSource="{Binding Processes}"
+                                  SelectedItem="{Binding SelectedProcess, Mode=TwoWay}">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate x:DataType="abstractions:DebugProcessInfo">
+                                    <StackPanel Orientation="Horizontal" Spacing="5">
+                                        <TextBlock Text="{Binding Name}" />
+                                        <TextBlock Text="{Binding Id, StringFormat=PID {0}}" Opacity="0.7" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+                        <Button Classes="subtle" Content="Refresh Processes"
+                                Click="RefreshProcesses_OnClick"
+                                HorizontalAlignment="Left" />
+
+                        <TextBlock Text="PROFILE DETAILS" Classes="studio-section" Margin="0,6,0,0" />
+                        <TextBox Text="{Binding ConfigurationNameText}" Watermark="Configuration name" />
+                        <Grid ColumnDefinitions="*,*" ColumnSpacing="5">
+                            <TextBox Text="{Binding ConfigurationProfileText}" Watermark="cpp/go/typescript" />
+                            <TextBox Grid.Column="1"
+                                     Text="{Binding ConfigurationRequestText}"
+                                     Watermark="Launch/Attach" />
+                        </Grid>
+                        <TextBox Text="{Binding ConfigurationProgramText}" Watermark="Program path" />
+                        <TextBox Text="{Binding ConfigurationProcessIdText}" Watermark="Process ID" />
+                        <TextBox Text="{Binding ConfigurationWorkingDirectoryText}" Watermark="Working directory" />
+                        <TextBox Text="{Binding ConfigurationArgumentsText}" Watermark="args; separated" />
+                        <CheckBox Content="Stop on entry" IsChecked="{Binding ConfigurationStopOnEntry}" />
+
+                        <Border BorderBrush="{DynamicResource StudioBorderBrush}"
+                                BorderThickness="1"
+                                Padding="7"
+                                Margin="0,4,0,0">
+                            <StackPanel Spacing="5">
+                                <TextBlock Text="NARRATIVE EVIDENCE" Classes="studio-section" />
+                                <TextBlock Text="{Binding DebugTargetNarrativeText}" TextWrapping="Wrap" />
+                                <Button Classes="subtle" Content="Use Recommended Profile"
+                                        Click="UseRecommendedProfile_OnClick"
+                                        HorizontalAlignment="Left" />
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+
+            <TabItem Header="Breakpoints">
+                <ScrollViewer>
+                    <StackPanel Spacing="6" Margin="3">
+                        <TextBlock Text="EXCEPTION FILTERS" Classes="studio-section" />
+                        <TextBox Text="{Binding ExceptionBreakpointFiltersText}"
+                                 Watermark="e.g. uncaught, all" />
+                        <Button Classes="subtle" Content="Apply Exception Filters"
+                                Click="ApplyExceptionBreakpoints_OnClick"
+                                HorizontalAlignment="Left" />
+                        <TextBlock Text="{Binding SupportedExceptionBreakpointFiltersText}"
+                                   Classes="studio-caption"
+                                   TextWrapping="Wrap" />
+
+                        <TextBlock Text="SOURCE BREAKPOINT" Classes="studio-section" Margin="0,6,0,0" />
+                        <Grid ColumnDefinitions="90,*" ColumnSpacing="5">
+                            <TextBox Text="{Binding BreakpointLineText}" Watermark="Line" />
+                            <Button Classes="subtle" Grid.Column="1"
+                                    Content="Toggle in active file"
+                                    Click="ToggleBreakpoint_OnClick" />
+                        </Grid>
+                        <TextBox Text="{Binding BreakpointConditionText}" Watermark="Condition, e.g. count &gt; 3" />
+                        <TextBox Text="{Binding BreakpointHitConditionText}" Watermark="Hit condition, e.g. &gt;= 5" />
+                        <TextBox Text="{Binding BreakpointLogMessageText}" Watermark="Log message" />
+                        <Button Classes="subtle" Content="Apply Breakpoint Options"
+                                Click="ApplyBreakpointOptions_OnClick"
+                                HorizontalAlignment="Left" />
+
+                        <TextBlock Text="BREAKPOINTS" Classes="studio-section" Margin="0,6,0,0" />
+                        <ListBox ItemsSource="{Binding SourceBreakpoints}" MinHeight="120"
+                                 SelectedItem="{Binding SelectedBreakpoint, Mode=TwoWay}">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate x:DataType="abstractions:DebugSourceBreakpoint">
+                                    <StackPanel Margin="3">
+                                        <TextBlock Text="{Binding Path}" TextTrimming="CharacterEllipsis" />
+                                        <TextBlock Text="{Binding Line, StringFormat=Line {0}}" Classes="studio-caption" />
+                                        <TextBlock Text="{Binding Condition, StringFormat=Condition: {0}}" Classes="studio-caption" />
+                                        <TextBlock Text="{Binding HitCondition, StringFormat=Hit: {0}}" Classes="studio-caption" />
+                                        <TextBlock Text="{Binding LogMessage, StringFormat=Log: {0}}"
+                                                   Foreground="#D7BA7D"
+                                                   TextWrapping="Wrap" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+
+                        <TextBlock Text="ADAPTER VERIFICATION" Classes="studio-section" Margin="0,6,0,0" />
+                        <ListBox ItemsSource="{Binding BreakpointStatuses}" MinHeight="100">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate x:DataType="abstractions:DebugBreakpointStatus">
+                                    <StackPanel Margin="3">
+                                        <TextBlock Text="{Binding Verified, StringFormat=Verified: {0}}" FontWeight="SemiBold" />
+                                        <TextBlock Text="{Binding SourcePath}" TextTrimming="CharacterEllipsis" />
+                                        <TextBlock Text="{Binding SourceLine, StringFormat=Junexis line {0}}" Classes="studio-caption" />
+                                        <TextBlock Text="{Binding RuntimePath}" Classes="studio-caption" TextTrimming="CharacterEllipsis" />
+                                        <TextBlock Text="{Binding ActualLine, StringFormat=Runtime line {0}}" Classes="studio-caption" />
+                                        <TextBlock Text="{Binding Message}" TextWrapping="Wrap" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+
+            <TabItem Header="Stack">
+                <Grid RowDefinitions="Auto,*,Auto,*" Margin="3">
+                    <TextBlock Text="CALL STACK" Classes="studio-section" Margin="2,2,0,5" />
+                    <ListBox Grid.Row="1"
+                             x:Name="FramesList"
+                             ItemsSource="{Binding Snapshot.StackFrames}"
+                             DoubleTapped="Frame_OnDoubleTapped">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate x:DataType="abstractions:DebugStackFrame">
+                                <StackPanel Margin="3">
+                                    <TextBlock Text="{Binding Name}" FontWeight="SemiBold" />
+                                    <TextBlock Text="{Binding SourcePath}" Classes="studio-caption" TextTrimming="CharacterEllipsis" />
+                                    <TextBlock Text="{Binding JunexisSymbolId}" Classes="studio-caption" />
+                                    <TextBlock Text="{Binding Line, StringFormat=Line {0}}" Classes="studio-caption" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                    <TextBlock Grid.Row="2" Text="SCOPES" Classes="studio-section" Margin="2,8,0,5" />
+                    <ListBox Grid.Row="3"
+                             x:Name="ScopesList"
+                             ItemsSource="{Binding Scopes}"
+                             DoubleTapped="Scope_OnDoubleTapped">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate x:DataType="abstractions:DebugScope">
+                                <TextBlock Text="{Binding Name}" Margin="3" />
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="Variables">
+                <Grid RowDefinitions="Auto,2*,Auto,Auto,Auto,*" Margin="3">
+                    <TextBlock Text="VARIABLES" Classes="studio-section" Margin="2,2,0,5" />
+                    <TreeView Grid.Row="1"
+                              x:Name="VariablesTree"
+                              ItemsSource="{Binding VariableTree}"
+                              SelectedItem="{Binding SelectedVariableNode, Mode=TwoWay}"
+                              DoubleTapped="InspectionNode_OnDoubleTapped">
+                        <TreeView.Styles>
+                            <Style Selector="TreeViewItem">
+                                <Setter Property="IsExpanded" Value="{ReflectionBinding IsExpanded, Mode=TwoWay}" />
+                            </Style>
+                        </TreeView.Styles>
+                        <TreeView.ItemTemplate>
+                            <TreeDataTemplate x:DataType="host:DebugInspectionNode" ItemsSource="{Binding Children}">
+                                <Grid ColumnDefinitions="Auto,*,Auto" Margin="3" ColumnSpacing="5">
+                                    <TextBlock Text="{Binding Name}" FontWeight="SemiBold" />
+                                    <TextBlock Grid.Column="1" Text="{Binding Value}" TextWrapping="Wrap" />
+                                    <TextBlock Grid.Column="2" Text="{Binding Type}" Classes="studio-caption" />
+                                </Grid>
+                            </TreeDataTemplate>
+                        </TreeView.ItemTemplate>
+                    </TreeView>
+                    <Grid Grid.Row="2" ColumnDefinitions="*,Auto" ColumnSpacing="4" Margin="0,4">
+                        <TextBox Text="{Binding VariableValueText}" Watermark="New variable value" />
+                        <Button Classes="subtle" Grid.Column="1" Content="Set" Click="SetVariable_OnClick" />
+                    </Grid>
+                    <TextBlock Grid.Row="3" Text="WATCHES" Classes="studio-section" Margin="2,6,0,5" />
+                    <Grid Grid.Row="4" ColumnDefinitions="*,Auto,Auto" ColumnSpacing="4" Margin="0,0,0,4">
+                        <TextBox Text="{Binding WatchExpressionText}"
+                                 Watermark="Expression"
+                                 KeyDown="WatchExpression_OnKeyDown" />
+                        <Button Classes="subtle" Grid.Column="1" Content="Add" Click="AddWatch_OnClick" />
+                        <Button Classes="subtle" Grid.Column="2" Content="Remove" Click="RemoveWatch_OnClick" />
+                    </Grid>
+                    <TreeView Grid.Row="5"
+                              x:Name="WatchesTree"
+                              ItemsSource="{Binding WatchTree}"
+                              DoubleTapped="InspectionNode_OnDoubleTapped">
+                        <TreeView.Styles>
+                            <Style Selector="TreeViewItem">
+                                <Setter Property="IsExpanded" Value="{ReflectionBinding IsExpanded, Mode=TwoWay}" />
+                            </Style>
+                        </TreeView.Styles>
+                        <TreeView.ItemTemplate>
+                            <TreeDataTemplate x:DataType="host:DebugInspectionNode" ItemsSource="{Binding Children}">
+                                <Grid ColumnDefinitions="Auto,*,Auto" Margin="3" ColumnSpacing="5">
+                                    <TextBlock Text="{Binding Name}" FontWeight="SemiBold" />
+                                    <TextBlock Grid.Column="1" Text="{Binding Value}" TextWrapping="Wrap" />
+                                    <TextBlock Grid.Column="2" Text="{Binding Type}" Classes="studio-caption" />
+                                </Grid>
+                            </TreeDataTemplate>
+                        </TreeView.ItemTemplate>
+                    </TreeView>
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="Console">
+                <Grid RowDefinitions="Auto,*,Auto,Auto,Auto,Auto,*" Margin="3">
+                    <TextBlock Text="{Binding DebugCapabilitiesText}"
+                               Classes="studio-caption"
+                               TextWrapping="Wrap"
+                               Margin="2,2,0,5" />
+                    <ListBox Grid.Row="1" ItemsSource="{Binding DebugConsoleEntries}">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate x:DataType="host:DebugConsoleEntry">
+                                <StackPanel Margin="3">
+                                    <TextBlock Text="{Binding Expression, StringFormat=&gt; {0}}" FontWeight="SemiBold" />
+                                    <TextBlock Text="{Binding Result}" TextWrapping="Wrap" />
+                                    <TextBlock Text="{Binding Type}" Classes="studio-caption" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                    <Grid Grid.Row="2" ColumnDefinitions="*,Auto" ColumnSpacing="4" Margin="0,4,0,8">
+                        <TextBox Text="{Binding DebugConsoleInput}"
+                                 Watermark="Expression or debugger command"
+                                 KeyDown="DebugConsole_OnKeyDown" />
+                        <Button Classes="subtle" Grid.Column="1" Content="Execute" Click="ExecuteDebugConsole_OnClick" />
+                    </Grid>
+                    <TextBlock Grid.Row="3" Text="DATA BREAKPOINTS" Classes="studio-section" Margin="2,0,0,5" />
+                    <StackPanel Grid.Row="4" Spacing="4">
+                        <TextBox Text="{Binding DataBreakpointAccessTypeText}" Watermark="write/read/readWrite" />
+                        <TextBox Text="{Binding DataBreakpointConditionText}" Watermark="Condition" />
+                        <TextBox Text="{Binding DataBreakpointHitConditionText}" Watermark="Hit condition" />
+                    </StackPanel>
+                    <WrapPanel Grid.Row="5" Margin="0,4">
+                        <Button Classes="subtle" Content="Watch Selected Variable"
+                                Click="AddDataBreakpoint_OnClick"
+                                Margin="0,0,4,4" />
+                        <Button Classes="subtle" Content="Remove"
+                                Click="RemoveDataBreakpoint_OnClick"
+                                Margin="0,0,4,4" />
+                    </WrapPanel>
+                    <ListBox Grid.Row="6"
+                             ItemsSource="{Binding DataBreakpoints}"
+                             SelectedItem="{Binding SelectedDataBreakpoint, Mode=TwoWay}">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate x:DataType="abstractions:DebugDataBreakpoint">
+                                <StackPanel Margin="3">
+                                    <TextBlock Text="{Binding Description}" FontWeight="SemiBold" />
+                                    <TextBlock Text="{Binding AccessType, StringFormat=Access: {0}}" Classes="studio-caption" />
+                                    <TextBlock Text="{Binding Condition, StringFormat=Condition: {0}}" Classes="studio-caption" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </Grid>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</UserControl>

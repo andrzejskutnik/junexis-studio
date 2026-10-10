@@ -1,0 +1,260 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Junexis.Studio.Shell"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="Junexis.Studio.Shell.MainWindow"
+        Title="Junexis Studio"
+        MinWidth="900"
+        MinHeight="600"
+        Background="{DynamicResource StudioWindowBackgroundBrush}">
+    <Grid x:Name="MainGrid"
+          RowDefinitions="Auto,40,*,1,190,24"
+          ColumnDefinitions="48,248,1,*,1,380">
+        <Grid Grid.Row="0"
+              Grid.ColumnSpan="6"
+              ColumnDefinitions="Auto,*"
+              Background="{DynamicResource StudioMenuBackgroundBrush}">
+            <PathIcon Width="16"
+                      Height="16"
+                      Margin="10,0,6,0"
+                      VerticalAlignment="Center"
+                      Data="{StaticResource StudioIconLogo}"
+                      Foreground="{DynamicResource StudioAccentBrush}" />
+            <Menu Grid.Column="1"
+                  x:Name="MainMenu" />
+        </Grid>
+
+        <local:WorkbenchRunBarView x:Name="WorkbenchRunBar"
+                                   Grid.Row="1"
+                                   Grid.ColumnSpan="6" />
+
+        <Border Grid.Row="2"
+                Grid.RowSpan="3"
+                Grid.Column="0"
+                Background="{DynamicResource StudioMenuBackgroundBrush}"
+                BorderBrush="{DynamicResource StudioBorderBrush}"
+                BorderThickness="0,0,1,0">
+            <Grid RowDefinitions="Auto,*">
+                <StackPanel Margin="3,5"
+                            Spacing="2">
+                    <Button x:Name="ActivityExplorerButton"
+                            Classes="activity-button active"
+                            ToolTip.Tip="Explorer (Ctrl+Shift+E)"
+                            AutomationProperties.Name="Explorer"
+                            Click="OnActivityExplorerClick">
+                        <PathIcon Classes="activity-icon"
+                                  Data="{StaticResource StudioIconExplorer}" />
+                    </Button>
+                    <Button x:Name="ActivitySearchButton"
+                            Classes="activity-button"
+                            ToolTip.Tip="Search (Ctrl+Shift+F)"
+                            AutomationProperties.Name="Search"
+                            Click="OnActivitySearchClick">
+                        <PathIcon Classes="activity-icon"
+                                  Data="{StaticResource StudioIconSearch}" />
+                    </Button>
+                    <Button x:Name="ActivityProblemsButton"
+                            Classes="activity-button"
+                            ToolTip.Tip="Problems (Ctrl+Shift+M)"
+                            AutomationProperties.Name="Problems"
+                            Click="OnActivityProblemsClick">
+                        <Grid>
+                            <PathIcon Classes="activity-icon"
+                                      Data="{StaticResource StudioIconProblems}" />
+                            <Border x:Name="ProblemsBadge"
+                                    Classes="activity-badge"
+                                    IsVisible="False">
+                                <TextBlock x:Name="ProblemsBadgeText" />
+                            </Border>
+                        </Grid>
+                    </Button>
+                    <Button x:Name="ActivitySourceControlButton"
+                            Classes="activity-button"
+                            ToolTip.Tip="Source Control (Ctrl+Shift+G)"
+                            AutomationProperties.Name="Source Control"
+                            Click="OnActivitySourceControlClick">
+                        <Grid>
+                            <PathIcon Classes="activity-icon"
+                                      Data="{StaticResource StudioIconSourceControl}" />
+                            <Border x:Name="SourceControlBadge"
+                                    Classes="activity-badge"
+                                    IsVisible="False">
+                                <TextBlock x:Name="SourceControlBadgeText" />
+                            </Border>
+                        </Grid>
+                    </Button>
+                    <Button x:Name="ActivityDebugButton"
+                            Classes="activity-button"
+                            ToolTip.Tip="Run and Debug (Ctrl+Shift+D)"
+                            AutomationProperties.Name="Run and Debug"
+                            Click="OnActivityDebugClick">
+                        <PathIcon Classes="activity-icon"
+                                  Data="{StaticResource StudioIconDebug}" />
+                    </Button>
+                    <Button x:Name="ActivityNarrativeButton"
+                            Classes="activity-button"
+                            ToolTip.Tip="Narrative: Why?"
+                            AutomationProperties.Name="Narrative Why"
+                            Click="OnActivityNarrativeClick">
+                        <PathIcon Classes="activity-icon"
+                                  Data="{StaticResource StudioIconNarrative}" />
+                    </Button>
+                </StackPanel>
+                <Button Grid.Row="1"
+                        Classes="activity-button"
+                        Margin="3,0,3,5"
+                        VerticalAlignment="Bottom"
+                        ToolTip.Tip="Show Command Palette (Ctrl+Shift+P)"
+                        AutomationProperties.Name="Show Command Palette"
+                        Click="OnActivityCommandPaletteClick">
+                    <PathIcon Classes="activity-icon"
+                              Data="{StaticResource StudioIconMore}" />
+                </Button>
+            </Grid>
+        </Border>
+
+        <Border x:Name="ExplorerPanelHost"
+                Grid.Row="2"
+                Grid.RowSpan="3"
+                Grid.Column="1"
+                Background="{DynamicResource StudioSideBackgroundBrush}"
+                Padding="7,6">
+            <Grid>
+                <ContentControl x:Name="ExplorerHost" />
+                <ContentControl x:Name="SearchHost"
+                                IsVisible="False" />
+            </Grid>
+        </Border>
+        <GridSplitter x:Name="ExplorerSplitter"
+                      Grid.Row="2"
+                      Grid.RowSpan="3"
+                      Grid.Column="2"
+                      ResizeDirection="Columns"
+                      Width="1" />
+        <Border Grid.Row="2"
+                Grid.Column="3"
+                Background="{DynamicResource StudioEditorBackgroundBrush}"
+                Padding="0">
+            <ContentControl x:Name="EditorHost" />
+        </Border>
+        <GridSplitter Grid.Row="3"
+                      Grid.Column="3"
+                      ResizeDirection="Rows"
+                      Height="1" />
+        <Border Grid.Row="4"
+                Grid.Column="3"
+                Background="{DynamicResource StudioPanelBackgroundBrush}"
+                Padding="5,3,3,3">
+            <Grid>
+                <TabControl x:Name="ToolTabsHost"
+                            Margin="0,0,30,0"
+                            SelectionChanged="OnToolPanelSelectionChanged">
+                    <TabControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Horizontal" />
+                        </ItemsPanelTemplate>
+                    </TabControl.ItemsPanel>
+                </TabControl>
+                <Button x:Name="ToolTabsMoreButton"
+                        Classes="panel-overflow"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Top"
+                        ToolTip.Tip="All bottom panels"
+                        AutomationProperties.Name="All bottom panels"
+                        Click="OnToolTabsMoreClick">
+                    <PathIcon Classes="compact-icon"
+                              Data="{StaticResource StudioIconMore}" />
+                </Button>
+            </Grid>
+        </Border>
+        <GridSplitter x:Name="RightSplitter"
+                      Grid.Row="2"
+                      Grid.RowSpan="3"
+                      Grid.Column="4"
+                      ResizeDirection="Columns"
+                      Width="1" />
+        <Border x:Name="RightPanelHost"
+                Grid.Row="2"
+                Grid.RowSpan="3"
+                Grid.Column="5"
+                Background="{DynamicResource StudioSideBackgroundBrush}"
+                Padding="5,3,3,3">
+            <Grid>
+                <TabControl x:Name="RightTabsHost"
+                            Margin="0,0,30,0"
+                            SelectionChanged="OnToolPanelSelectionChanged">
+                    <TabControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Horizontal" />
+                        </ItemsPanelTemplate>
+                    </TabControl.ItemsPanel>
+                </TabControl>
+                <Button x:Name="RightTabsMoreButton"
+                        Classes="panel-overflow"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Top"
+                        ToolTip.Tip="All right panels"
+                        AutomationProperties.Name="All right panels"
+                        Click="OnRightTabsMoreClick">
+                    <PathIcon Classes="compact-icon"
+                              Data="{StaticResource StudioIconMore}" />
+                </Button>
+            </Grid>
+        </Border>
+        <Border Grid.Row="5" Grid.ColumnSpan="6"
+                Background="{DynamicResource StudioStatusBackgroundBrush}"
+                BorderThickness="0,1,0,0"
+                BorderBrush="{DynamicResource StudioBorderBrush}"
+                Padding="8,0">
+            <DockPanel>
+                <TextBlock x:Name="StatusBarBranch"
+                           DockPanel.Dock="Left"
+                           VerticalAlignment="Center"
+                           FontSize="12"
+                           Foreground="{DynamicResource StudioAccentBrush}"
+                           Text=""
+                           Margin="0,0,12,0" />
+                <TextBlock x:Name="StatusBarDiagnostics"
+                           DockPanel.Dock="Left"
+                           VerticalAlignment="Center"
+                           FontSize="12"
+                           Foreground="{DynamicResource StudioMutedTextBrush}"
+                           Text=""
+                           Margin="0,0,12,0" />
+                <TextBlock x:Name="StatusBarWorkspace"
+                           DockPanel.Dock="Left"
+                           VerticalAlignment="Center"
+                           FontSize="12"
+                           Foreground="{DynamicResource StudioMutedTextBrush}"
+                           TextTrimming="CharacterEllipsis"
+                           MaxWidth="400"
+                           Text=""
+                           Margin="0,0,16,0" />
+                <!-- Right side: declared in reverse visual order (last declared = leftmost of right group) -->
+                <Button x:Name="StatusBarText"
+                        DockPanel.Dock="Right"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Center"
+                        VerticalContentAlignment="Center"
+                        FontSize="12"
+                        Foreground="{DynamicResource StudioMutedTextBrush}"
+                        Background="Transparent"
+                        BorderThickness="0"
+                        Padding="4,0"
+                        Cursor="Hand"
+                        ToolTip.Tip="Click to go to line (Ctrl+G)"
+                        Content="" />
+                <TextBlock x:Name="StatusBarBuild"
+                           DockPanel.Dock="Right"
+                           HorizontalAlignment="Right"
+                           VerticalAlignment="Center"
+                           FontSize="12"
+                           Foreground="{DynamicResource StudioMutedTextBrush}"
+                           Text=""
+                           Margin="0,0,20,0" />
+            </DockPanel>
+        </Border>
+    </Grid>
+</Window>

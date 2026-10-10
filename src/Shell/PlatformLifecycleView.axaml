@@ -1,0 +1,76 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:host="clr-namespace:Junexis.Studio.Host;assembly=Junexis.Studio.Host"
+             x:DataType="host:PlatformLifecycleViewModel"
+             x:Class="Junexis.Studio.Shell.PlatformLifecycleView">
+    <ScrollViewer>
+        <StackPanel Margin="8" Spacing="8">
+            <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
+                <TextBlock Text="Cykl platformy" FontWeight="SemiBold" VerticalAlignment="Center" />
+                <Button Grid.Column="1" Content="Anuluj" Click="Cancel_OnClick"
+                        IsEnabled="{Binding CanCancel}" />
+            </Grid>
+            <TextBlock Text="Studio wyświetla wynik publicznego CLI i nie zapisuje profilu samodzielnie."
+                       TextWrapping="Wrap" FontSize="11" />
+            <TextBlock Text="{Binding StatusText}" TextWrapping="Wrap" />
+
+            <Border Classes="panel-card" Padding="8">
+                <StackPanel Spacing="6">
+                    <TextBlock Text="Przejęcie nadzoru" FontWeight="SemiBold" />
+                    <TextBlock Text="{Binding RecoveryText}" TextWrapping="Wrap" />
+                    <Button Content="Przejmij nadzór nad przerwaną operacją"
+                            Click="TakeOver_OnClick" IsEnabled="{Binding !IsBusy}" />
+                </StackPanel>
+            </Border>
+
+            <TextBlock Text="Profil instalacji (opcjonalny)" FontWeight="SemiBold" />
+            <TextBox Text="{Binding ProfilePath}" Watermark="Domyślny profil użytkownika" />
+
+            <Border Classes="panel-card" Padding="8">
+                <StackPanel Spacing="6">
+                    <TextBlock Text="Plan i historia" FontWeight="SemiBold" />
+                    <TextBox Text="{Binding CatalogPath}" Watermark="Podpisany katalog wydań" />
+                    <TextBox Text="{Binding TrustStorePath}" Watermark="Magazyn zaufania" />
+                    <TextBox Text="{Binding CurrentManifestPath}" Watermark="Manifest aktywnego wydania" />
+                    <TextBox Text="{Binding TargetBundlePath}" Watermark="Archiwum wydania docelowego" />
+                    <StackPanel Orientation="Horizontal" Spacing="6">
+                        <Button Content="Pokaż plan" Click="PlanUpdate_OnClick" IsEnabled="{Binding !IsBusy}" />
+                        <Button Content="Odśwież postęp" Click="History_OnClick" IsEnabled="{Binding !IsBusy}" />
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+
+            <Border Classes="panel-card" Padding="8">
+                <StackPanel Spacing="6">
+                    <TextBlock Text="Naprawa" FontWeight="SemiBold" />
+                    <TextBlock Text="Wskaż dokładnie jedno źródło przed sprawdzeniem."
+                               TextWrapping="Wrap" FontSize="11" />
+                    <TextBox Text="{Binding RepairOfflineSource}" Watermark="Katalog źródła offline" />
+                    <TextBox Text="{Binding RepairBaseUrl}" Watermark="Bazowy adres HTTPS" />
+                    <StackPanel Orientation="Horizontal" Spacing="6">
+                        <Button Content="Sprawdź" Click="CheckRepair_OnClick" IsEnabled="{Binding !IsBusy}" />
+                        <Button Content="Napraw" Click="ApplyRepair_OnClick" IsEnabled="{Binding CanApplyRepair}" />
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+
+            <Border Classes="panel-card" Padding="8">
+                <StackPanel Spacing="6">
+                    <TextBlock Text="Powrót do poprzedniego wydania" FontWeight="SemiBold" />
+                    <TextBlock Text="Powrót można wykonać dopiero po udanym planie dla tych samych materiałów."
+                               TextWrapping="Wrap" FontSize="11" />
+                    <StackPanel Orientation="Horizontal" Spacing="6">
+                        <Button Content="Pokaż plan powrotu" Click="PlanRollback_OnClick"
+                                IsEnabled="{Binding !IsBusy}" />
+                        <Button Content="Wykonaj powrót" Click="ApplyRollback_OnClick"
+                                IsEnabled="{Binding CanApplyRollback}" />
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+
+            <TextBlock Text="Wynik publicznego CLI" FontWeight="SemiBold" />
+            <TextBox Text="{Binding LogText}" IsReadOnly="True" AcceptsReturn="True"
+                     TextWrapping="Wrap" MinHeight="160" />
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

@@ -1,0 +1,478 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:host="clr-namespace:Junexis.Studio.Host;assembly=Junexis.Studio.Host"
+             xmlns:abstractions="clr-namespace:Junexis.Studio.Abstractions;assembly=Junexis.Studio.Abstractions"
+             x:DataType="host:WhyPanelViewModel"
+             x:Class="Junexis.Studio.Shell.WhyPanelView">
+    <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,*" Margin="8" IsSharedSizeScope="True">
+        <Grid Grid.Row="0" ColumnDefinitions="*,140,Auto,Auto,Auto,Auto,Auto" ColumnSpacing="6" Margin="0,0,0,10">
+            <TextBox Grid.Column="0"
+                     x:Name="TraceUrlTextBox"
+                     Text="{Binding BaseUrl}"
+                     Watermark="TraceCollector URL" />
+            <TextBox Grid.Column="1"
+                     x:Name="EventIdTextBox"
+                     Text="{Binding EventIdText}"
+                     Watermark="Event ID" />
+            <Button Grid.Column="2"
+                    x:Name="LoadButton"
+                    Classes="subtle"
+                    Content="Load Why" />
+            <Button Grid.Column="3" Classes="subtle" Content="Previous" Click="OnPreviousEventClick" />
+            <Button Grid.Column="4" Classes="subtle" Content="Next" Click="OnNextEventClick" />
+            <Button Grid.Column="5" Classes="subtle" Content="Export JSON" Click="OnExportJsonClick" />
+            <Button Grid.Column="6" Classes="subtle" Content="Export Markdown" Click="OnExportMarkdownClick" />
+        </Grid>
+
+        <TextBlock Grid.Row="1"
+                   Classes="field-label"
+                   Text="{Binding StatusText}"
+                   Margin="0,0,0,10"
+                   TextWrapping="Wrap" />
+
+        <Border Grid.Row="2" Classes="panel-card" Margin="0,0,0,8">
+            <Grid RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="Auto,*,Auto,Auto,Auto" ColumnSpacing="8" RowSpacing="6">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" SharedSizeGroup="WhyFieldLabel" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Classes="field-label" Text="Session:" />
+                <TextBlock Grid.Column="1" Classes="field-value" Text="{Binding NarrativeSessionText}" TextWrapping="Wrap" />
+                <Button Grid.Column="2" Classes="subtle" Content="Start" Click="OnRestartNarrativeClick" />
+                <Button Grid.Column="3" Classes="subtle" Content="Refresh" Click="OnRefreshNarrativeClick" />
+                <Button Grid.Column="4" Classes="subtle" Content="Stop" Click="OnStopNarrativeClick" />
+                <TextBlock Grid.Row="1" Classes="field-label" Text="Runtime:" />
+                <TextBlock Grid.Row="1" Grid.Column="1" Classes="field-value" Text="{Binding NarrativeActivityText}" TextWrapping="Wrap" />
+                <Button Grid.Row="1" Grid.Column="2" Classes="subtle" Content="Pause follow" Click="OnPauseRuntimeFollowClick" />
+                <Button Grid.Row="1" Grid.Column="3" Classes="subtle" Content="Resume" Click="OnResumeRuntimeFollowClick" />
+                <CheckBox Grid.Row="1" Grid.Column="4"
+                          Content="Auto-follow latest event"
+                          IsChecked="{Binding AutoFollowRuntime}"
+                          VerticalAlignment="Center" />
+                <TextBlock Grid.Row="2" Classes="field-label" Text="Filters:" />
+                <Grid Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="4"
+                      ColumnDefinitions="*,*" ColumnSpacing="8">
+                    <TextBox Text="{Binding NarrativeFilterText}"
+                             Watermark="Narrative ID (exact, optional)" />
+                    <TextBox Grid.Column="1"
+                             Text="{Binding EventKindFilterText}"
+                             Watermark="Event kind, e.g. COMM_RECV" />
+                </Grid>
+            </Grid>
+        </Border>
+
+        <Border Grid.Row="3" Classes="panel-card" Margin="0,0,0,8">
+            <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="8">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" SharedSizeGroup="WhyFieldLabel" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Classes="field-label" Text="Stopped frame:" />
+                <TextBlock Grid.Column="1" Classes="field-value" Text="{Binding DebugCorrelationText}" TextWrapping="Wrap" />
+                <Button Grid.Column="2" Classes="subtle" Content="Why did this happen?" Click="OnLoadCorrelatedWhyClick" />
+            </Grid>
+        </Border>
+
+        <Border Grid.Row="4" Classes="panel-card" Margin="0,0,0,8">
+            <Grid ColumnDefinitions="*,Auto,Auto,Auto" ColumnSpacing="8">
+                <TextBlock Classes="field-value" Text="{Binding PinnedStoryText}" TextWrapping="Wrap" VerticalAlignment="Center" />
+                <Button Grid.Column="1" Classes="subtle" Content="Pin current" Click="OnPinStoryClick" />
+                <Button Grid.Column="2" Classes="subtle" Content="Compare" Click="OnCompareStoryClick" />
+                <Button Grid.Column="3" Classes="subtle" Content="Clear pin" Click="OnClearPinnedStoryClick" />
+            </Grid>
+        </Border>
+
+        <TabControl Grid.Row="5">
+            <TabItem Header="Causal chain">
+                <ListBox ItemsSource="{Binding CausalChain}">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate x:DataType="host:WhyTraceChainEntry">
+                            <Border Padding="6" Margin="0,0,0,4" Classes="panel-card">
+                                <StackPanel Spacing="2">
+                                    <TextBlock FontWeight="SemiBold" Text="{Binding Kind}" />
+                                    <TextBlock Text="{Binding EventId, StringFormat=Event #{0}}" />
+                                    <TextBlock Text="{Binding TaskId, StringFormat=Task {0}}" />
+                                    <TextBlock Text="{Binding LamportClock, StringFormat=Lamport {0}}" />
+                                    <TextBlock Text="{Binding NarrativeId, StringFormat=Narrative {0}}" />
+                                    <TextBlock Text="{Binding Timestamp}" FontSize="11" Foreground="#888888" />
+                                </StackPanel>
+                            </Border>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </TabItem>
+            <TabItem Header="Junexis communication">
+                <ListBox x:Name="CommunicationsList"
+                         ItemsSource="{Binding Communications}"
+                         DoubleTapped="OnCommunicationDoubleTapped">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate x:DataType="host:WhyCommunicationResolution">
+                            <Border Padding="6" Margin="0,0,0,4" Classes="panel-card">
+                                <StackPanel Spacing="2">
+                                    <TextBlock Text="{Binding Kind}" FontWeight="SemiBold" />
+                                    <TextBlock Text="{Binding CommunicationId}" TextWrapping="Wrap" />
+                                    <TextBlock Text="{Binding SourceSymbolId}" FontSize="11" />
+                                    <TextBlock Text="{Binding TargetSymbolId}" FontSize="11" />
+                                    <TextBlock Text="Double-click to open Junexis source" FontSize="10" Opacity="0.7" />
+                                </StackPanel>
+                            </Border>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </TabItem>
+            <TabItem Header="Timeline">
+                <ListBox ItemsSource="{Binding Timeline}">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate x:DataType="host:DiagnosticStoryEvent">
+                            <StackPanel Margin="6" Spacing="2">
+                                <TextBlock Text="{Binding Kind}" FontWeight="SemiBold" />
+                                <TextBlock Text="{Binding EventId, StringFormat=Event #{0}}" />
+                                <TextBlock Text="{Binding TaskId, StringFormat=Task {0}}" />
+                                <TextBlock Text="{Binding LamportClock, StringFormat=Lamport {0}}" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </TabItem>
+            <TabItem Header="Concurrent">
+                <ListBox ItemsSource="{Binding ConcurrentEvents}">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate x:DataType="host:DiagnosticStoryEvent">
+                            <StackPanel Margin="6" Spacing="2">
+                                <TextBlock Text="{Binding Kind}" FontWeight="SemiBold" />
+                                <TextBlock Text="{Binding EventId, StringFormat=Event #{0}}" />
+                                <TextBlock Text="{Binding TaskId, StringFormat=Task {0}}" />
+                                <TextBlock Text="{Binding LamportClock, StringFormat=Lamport {0}}" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </TabItem>
+            <TabItem Header="Evidence">
+                <ListBox ItemsSource="{Binding StoryEvidence}">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Margin="6" Text="{Binding}" TextWrapping="Wrap" />
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </TabItem>
+            <TabItem Header="Mentor">
+                <Grid RowDefinitions="Auto,*">
+                    <Border Padding="8" Margin="4" Classes="panel-card">
+                        <TextBlock Text="{Binding MentorContextText}" TextWrapping="Wrap" />
+                    </Border>
+                    <ListBox Grid.Row="1" ItemsSource="{Binding MentorFindings}">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate x:DataType="abstractions:MentorFinding">
+                                <StackPanel Margin="6" Spacing="2">
+                                    <TextBlock Text="{Binding Code}" FontWeight="SemiBold" />
+                                    <TextBlock Text="{Binding Message}" TextWrapping="Wrap" />
+                                    <TextBlock Text="{Binding RelatedSymbolId}" FontSize="11" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Comparison">
+                <StackPanel Margin="8" Spacing="6">
+                    <TextBlock Text="{Binding StoryComparison.Summary}"
+                               FontWeight="SemiBold"
+                               TextWrapping="Wrap" />
+                    <TextBlock Text="{Binding StoryComparison.TimelineDelta, StringFormat=Timeline delta: {0}}" />
+                    <TextBlock Text="{Binding StoryComparison.CausalChainDelta, StringFormat=Causal chain delta: {0}}" />
+                    <TextBlock Text="{Binding StoryComparison.ConcurrentEventsDelta, StringFormat=Concurrent events delta: {0}}" />
+                    <TextBlock Text="{Binding StoryComparison.CommunicationsDelta, StringFormat=Communications delta: {0}}" />
+                    <TextBlock Text="Added evidence" FontWeight="SemiBold" Margin="0,6,0,0" />
+                    <ListBox ItemsSource="{Binding StoryComparison.AddedEvidence}" />
+                    <TextBlock Text="Removed evidence" FontWeight="SemiBold" Margin="0,6,0,0" />
+                    <ListBox ItemsSource="{Binding StoryComparison.RemovedEvidence}" />
+                </StackPanel>
+            </TabItem>
+            <TabItem Header="Session">
+                <ScrollViewer>
+                    <StackPanel Margin="8" Spacing="8">
+                        <TextBlock Text="Verified bundle provenance"
+                                   FontWeight="SemiBold" />
+                        <Border Padding="8" Classes="panel-card">
+                            <TextBlock Text="{Binding ImportedSessionSummaryText}"
+                                       TextWrapping="Wrap" />
+                        </Border>
+                        <TextBlock Text="Signature and local trust"
+                                   FontWeight="SemiBold" />
+                        <Border Padding="8" Classes="panel-card">
+                            <TextBlock Text="{Binding DiagnosticAuthenticityText}"
+                                       TextWrapping="Wrap" />
+                        </Border>
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <Button Content="Trust signer"
+                                    IsEnabled="{Binding CanTrustImportedSigner}"
+                                    Click="OnTrustImportedSignerClick" />
+                            <Button Content="Remove trust"
+                                    IsEnabled="{Binding CanRemoveImportedSignerTrust}"
+                                    Click="OnRemoveImportedSignerTrustClick" />
+                        </StackPanel>
+                        <TextBlock Text="Live comparison candidate"
+                                   FontWeight="SemiBold"
+                                   Margin="0,4,0,0" />
+                        <TextBlock Text="{Binding LiveComparisonCandidateText}"
+                                   TextWrapping="Wrap" />
+                        <Button Content="Compare imported with live"
+                                HorizontalAlignment="Left"
+                                IsEnabled="{Binding CanCompareImportedWithLive}"
+                                Click="OnCompareImportedWithLiveClick" />
+                        <TextBlock Text="{Binding CrossSessionComparison.Summary}"
+                                   FontWeight="SemiBold"
+                                   TextWrapping="Wrap" />
+                        <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
+                            <StackPanel Spacing="3">
+                                <TextBlock Text="Live deltas" FontWeight="SemiBold" />
+                                <TextBlock Text="{Binding CrossSessionComparison.TimelineDelta, StringFormat=Timeline: {0}}" />
+                                <TextBlock Text="{Binding CrossSessionComparison.CausalChainDelta, StringFormat=Causal chain: {0}}" />
+                                <TextBlock Text="{Binding CrossSessionComparison.ConcurrentEventsDelta, StringFormat=Concurrent: {0}}" />
+                                <TextBlock Text="{Binding CrossSessionComparison.CommunicationsDelta, StringFormat=Communications: {0}}" />
+                            </StackPanel>
+                            <Grid Grid.Column="1" ColumnDefinitions="*,*" ColumnSpacing="8">
+                                <StackPanel>
+                                    <TextBlock Text="Added in live" FontWeight="SemiBold" />
+                                    <ListBox ItemsSource="{Binding CrossSessionComparison.AddedInLive}" />
+                                </StackPanel>
+                                <StackPanel Grid.Column="1">
+                                    <TextBlock Text="Missing from live" FontWeight="SemiBold" />
+                                    <ListBox ItemsSource="{Binding CrossSessionComparison.MissingFromLive}" />
+                                </StackPanel>
+                            </Grid>
+                        </Grid>
+                        <TextBlock Text="Verified evidence files"
+                                   FontWeight="SemiBold"
+                                   Margin="0,6,0,0" />
+                        <ListBox ItemsSource="{Binding ImportedEvidenceFiles}">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate x:DataType="host:NarrativeDiagnosticEvidenceFile">
+                                    <Border Padding="6" Margin="0,0,0,4"
+                                            Classes="panel-card">
+                                        <StackPanel Spacing="2">
+                                            <TextBlock Text="{Binding Path}" FontWeight="SemiBold" />
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock Text="{Binding SizeBytes}" />
+                                                <TextBlock Text=" bytes" />
+                                            </StackPanel>
+                                            <TextBlock Text="{Binding Sha256}"
+                                                       FontFamily="Consolas"
+                                                       FontSize="10"
+                                                       TextWrapping="Wrap" />
+                                        </StackPanel>
+                                    </Border>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+            <TabItem Header="Review">
+                <ScrollViewer>
+                    <StackPanel Margin="8" Spacing="8">
+                        <Border Padding="8" Classes="panel-card">
+                            <TextBlock Text="{Binding ReviewStateText}" TextWrapping="Wrap" />
+                        </Border>
+                        <TextBlock Text="Mentor proposals"
+                                   FontWeight="SemiBold"
+                                   Margin="0,4,0,0" />
+                        <TextBlock Text="{Binding MentorReviewProposalText}"
+                                   TextWrapping="Wrap" />
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <Button Content="Generate from Story"
+                                    IsEnabled="{Binding CanGenerateMentorReviewProposals}"
+                                    Click="OnGenerateMentorReviewProposalsClick" />
+                            <Button Content="Accept selected"
+                                    IsEnabled="{Binding CanActOnMentorReviewProposal}"
+                                    Click="OnAcceptMentorReviewProposalClick" />
+                            <Button Content="Dismiss selected"
+                                    IsEnabled="{Binding CanActOnMentorReviewProposal}"
+                                    Click="OnDismissMentorReviewProposalClick" />
+                        </StackPanel>
+                        <ListBox ItemsSource="{Binding MentorReviewProposals}"
+                                 SelectedItem="{Binding SelectedMentorReviewProposal}"
+                                 MaxHeight="180">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate x:DataType="host:NarrativeDiagnosticMentorProposal">
+                                    <Border Padding="7" Margin="0,0,0,4"
+                                            Classes="panel-card">
+                                        <StackPanel Spacing="2">
+                                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                                <TextBlock Text="{Binding Kind}" FontWeight="SemiBold" />
+                                                <TextBlock Text="{Binding FindingCode}" />
+                                                <TextBlock Text="{Binding Severity}" Opacity="0.75" />
+                                            </StackPanel>
+                                            <TextBlock Text="{Binding Text}" TextWrapping="Wrap" />
+                                            <TextBlock Text="{Binding RelatedSymbolId}"
+                                                       FontFamily="Consolas" FontSize="11" Opacity="0.75" />
+                                            <TextBlock Text="{Binding BuildId}"
+                                                       FontFamily="Consolas" FontSize="10" Opacity="0.6" />
+                                        </StackPanel>
+                                    </Border>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                        <Grid ColumnDefinitions="*,*" ColumnSpacing="8">
+                            <StackPanel Spacing="4">
+                                <TextBlock Text="Reviewer" FontWeight="SemiBold" />
+                                <TextBox Text="{Binding ReviewAuthorText}"
+                                         IsEnabled="{Binding CanEditReview}"
+                                         Watermark="Name or team identity" />
+                            </StackPanel>
+                            <StackPanel Grid.Column="1" Spacing="4">
+                                <TextBlock Text="Case status" FontWeight="SemiBold" />
+                                <ComboBox ItemsSource="{Binding ReviewStatuses}"
+                                          SelectedItem="{Binding ReviewStatus}"
+                                          IsEnabled="{Binding CanEditReview}" />
+                            </StackPanel>
+                        </Grid>
+                        <Grid ColumnDefinitions="Auto,*" ColumnSpacing="8">
+                            <ComboBox ItemsSource="{Binding ReviewKinds}"
+                                      SelectedItem="{Binding ReviewKind}"
+                                      IsEnabled="{Binding CanEditReview}"
+                                      MinWidth="120" />
+                            <ComboBox Grid.Column="1"
+                                      ItemsSource="{Binding ImportedEvidenceFiles}"
+                                      SelectedItem="{Binding SelectedReviewEvidenceFile}"
+                                      IsEnabled="{Binding CanEditReview}"
+                                      DisplayMemberBinding="{Binding Path}"
+                                      PlaceholderText="Optional verified evidence file" />
+                        </Grid>
+                        <TextBox Text="{Binding ReviewText}"
+                                 IsEnabled="{Binding CanEditReview}"
+                                 AcceptsReturn="True"
+                                 MinHeight="72"
+                                 TextWrapping="Wrap"
+                                 Watermark="Observation, hypothesis, decision, or action…" />
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <Button Content="Add statement"
+                                    IsEnabled="{Binding CanEditReview}"
+                                    Click="OnAddReviewEntryClick" />
+                            <Button Content="Remove selected"
+                                    IsEnabled="{Binding CanEditReview}"
+                                    Click="OnRemoveReviewEntryClick" />
+                            <Button Content="Save revision"
+                                    IsEnabled="{Binding CanEditReview}"
+                                    Click="OnSaveReviewRevisionClick" />
+                            <Button Content="Compare latest"
+                                    IsEnabled="{Binding CanEditReview}"
+                                    Click="OnCompareReviewRevisionsClick" />
+                        </StackPanel>
+                        <ListBox ItemsSource="{Binding ReviewEntries}"
+                                 SelectedItem="{Binding SelectedReviewEntry}"
+                                 MinHeight="150">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate x:DataType="host:NarrativeDiagnosticReviewEntry">
+                                    <Border Padding="7" Margin="0,0,0,4"
+                                            Classes="panel-card">
+                                        <StackPanel Spacing="2">
+                                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                                <TextBlock Text="{Binding Kind}" FontWeight="SemiBold" />
+                                                <TextBlock Text="{Binding Source}" />
+                                                <TextBlock Text="{Binding Author}" />
+                                                <TextBlock Text="{Binding CreatedAt}" Opacity="0.7" />
+                                            </StackPanel>
+                                            <TextBlock Text="{Binding Text}" TextWrapping="Wrap" />
+                                            <TextBlock Text="{Binding EventId, StringFormat=Event #{0}}"
+                                                       FontSize="11" Opacity="0.75" />
+                                            <TextBlock Text="{Binding SymbolId}"
+                                                       FontFamily="Consolas" FontSize="11" Opacity="0.75" />
+                                            <TextBlock Text="{Binding EvidencePath}"
+                                                       FontSize="11" Opacity="0.75" />
+                                            <TextBlock Text="{Binding SourceReference}"
+                                                       FontFamily="Consolas" FontSize="10" Opacity="0.6" />
+                                        </StackPanel>
+                                    </Border>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                        <Border Padding="8" Classes="panel-card">
+                            <TextBlock Text="{Binding ReviewSignatureText}" TextWrapping="Wrap" />
+                        </Border>
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <Button Content="Sign saved review"
+                                    IsEnabled="{Binding CanExportDiagnosticCase}"
+                                    Click="OnSignReviewClick" />
+                            <Button Content="Export case"
+                                    IsEnabled="{Binding CanExportDiagnosticCase}"
+                                    Click="OnExportDiagnosticCaseClick" />
+                            <Button Content="Import case"
+                                    Click="OnImportDiagnosticCaseClick" />
+                        </StackPanel>
+                        <TextBlock Text="{Binding ReviewComparison.Summary}"
+                                   FontWeight="SemiBold" TextWrapping="Wrap" />
+                        <Grid ColumnDefinitions="*,*" ColumnSpacing="8">
+                            <StackPanel>
+                                <TextBlock Text="Added in latest revision" FontWeight="SemiBold" />
+                                <ListBox ItemsSource="{Binding ReviewComparison.AddedEntries}" />
+                            </StackPanel>
+                            <StackPanel Grid.Column="1">
+                                <TextBlock Text="Removed in latest revision" FontWeight="SemiBold" />
+                                <ListBox ItemsSource="{Binding ReviewComparison.RemovedEntries}" />
+                            </StackPanel>
+                        </Grid>
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+            <TabItem Header="Bookmarks">
+                <Grid Margin="8" RowDefinitions="Auto,Auto,*,Auto,Auto" RowSpacing="8">
+                    <Border Padding="6" Classes="panel-card">
+                        <TextBlock Text="{Binding DiagnosticSessionModeText}"
+                                   FontWeight="SemiBold"
+                                   TextWrapping="Wrap" />
+                    </Border>
+                    <Grid Grid.Row="1" ColumnDefinitions="*,Auto" ColumnSpacing="8">
+                        <TextBox Text="{Binding BookmarkNameText}"
+                                 IsEnabled="{Binding CanEditBookmarks}"
+                                 Watermark="Bookmark name" />
+                        <Button Grid.Column="1"
+                                Content="Save current"
+                                IsEnabled="{Binding CanEditBookmarks}"
+                                Click="OnSaveBookmarkClick" />
+                    </Grid>
+                    <ListBox Grid.Row="2"
+                             ItemsSource="{Binding Bookmarks}"
+                             SelectedItem="{Binding SelectedBookmark}">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate x:DataType="host:NarrativeStoryBookmark">
+                                <Border Padding="6" Margin="0,0,0,4"
+                                        Classes="panel-card">
+                                    <StackPanel Spacing="2">
+                                        <TextBlock Text="{Binding Name}" FontWeight="SemiBold" />
+                                        <TextBlock Text="{Binding Story.TargetEventId, StringFormat=Event #{0}}" />
+                                        <TextBlock Text="{Binding Story.BuildId}" FontSize="11" />
+                                        <TextBlock Text="{Binding CreatedAt}" FontSize="11" Opacity="0.7" />
+                                    </StackPanel>
+                                </Border>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                    <StackPanel Grid.Row="3" Orientation="Horizontal" Spacing="8">
+                        <Button Content="Open" Click="OnOpenBookmarkClick" />
+                        <Button Content="Remove"
+                                IsEnabled="{Binding CanEditBookmarks}"
+                                Click="OnRemoveBookmarkClick" />
+                        <Button Content="Import bundle"
+                                Click="OnImportDiagnosticSessionClick" />
+                        <Button Content="Close imported"
+                                IsVisible="{Binding CanCloseImportedSession}"
+                                Click="OnCloseImportedSessionClick" />
+                    </StackPanel>
+                    <StackPanel Grid.Row="4" Orientation="Horizontal" Spacing="8">
+                        <Button Content="Export session bundle"
+                                Click="OnExportDiagnosticSessionClick" />
+                        <Button Content="Export signed bundle"
+                                Click="OnExportSignedDiagnosticSessionClick" />
+                    </StackPanel>
+                </Grid>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</UserControl>

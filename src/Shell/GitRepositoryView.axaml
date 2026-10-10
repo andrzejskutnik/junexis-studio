@@ -1,0 +1,202 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:host="clr-namespace:Junexis.Studio.Host;assembly=Junexis.Studio.Host"
+             xmlns:abs="clr-namespace:Junexis.Studio.Abstractions;assembly=Junexis.Studio.Abstractions"
+             x:DataType="host:GitRepositoryViewModel"
+             x:Class="Junexis.Studio.Shell.GitRepositoryView">
+    <Grid RowDefinitions="Auto,*,Auto" Margin="6">
+        <WrapPanel Grid.Row="0" Margin="0,0,0,6">
+            <Button Classes="subtle" Content="Refresh" Click="OnRefresh" Padding="7,2" />
+            <Button Classes="subtle" Content="Cancel"
+                    Click="OnCancel"
+                    IsEnabled="{Binding CanCancel}"
+                    Padding="7,2"
+                    Margin="4,0,0,0" />
+        </WrapPanel>
+
+        <TabControl Grid.Row="1">
+            <TabItem Header="History">
+                <Grid RowDefinitions="2*,Auto,3*" Margin="4">
+                    <ListBox x:Name="HistoryList"
+                             ItemsSource="{Binding History}"
+                             SelectedItem="{Binding SelectedCommit}"
+                             DoubleTapped="OnCommitDoubleTap">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate x:DataType="host:GitCommitInfo">
+                                <Grid ColumnDefinitions="70,*,Auto">
+                                    <TextBlock Text="{Binding ShortHash}" Foreground="#4ec9b0" />
+                                    <TextBlock Grid.Column="1" Text="{Binding Subject}" Margin="6,0" />
+                                    <TextBlock Grid.Column="2" Text="{Binding Author}" Opacity="0.65" />
+                                </Grid>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                    <Button Classes="subtle" Grid.Row="1"
+                            Content="Load commit details"
+                            Click="OnLoadDetails"
+                            Margin="0,4"
+                            HorizontalAlignment="Stretch" />
+                    <TextBox Grid.Row="2"
+                             Text="{Binding Details}"
+                             IsReadOnly="True"
+                             AcceptsReturn="True"
+                             FontFamily="Consolas"
+                             TextWrapping="NoWrap"
+                             ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                             ScrollViewer.VerticalScrollBarVisibility="Auto" />
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="Branches">
+                <Grid RowDefinitions="*,Auto,Auto,Auto,Auto" Margin="4">
+                    <ListBox ItemsSource="{Binding Branches}"
+                             SelectedItem="{Binding SelectedBranch}">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate x:DataType="host:GitBranchInfo">
+                                <Grid ColumnDefinitions="24,*,Auto">
+                                    <TextBlock Text="{Binding IsCurrent}" />
+                                    <TextBlock Grid.Column="1" Text="{Binding Name}" />
+                                    <TextBlock Grid.Column="2" Text="{Binding Upstream}" Opacity="0.65" />
+                                </Grid>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                    <Button Classes="subtle" Grid.Row="1"
+                            Content="Switch to selected local branch"
+                            Click="OnSwitchBranch"
+                            Margin="0,4,0,0" />
+                    <Grid Grid.Row="2" ColumnDefinitions="*,Auto" Margin="0,4,0,0">
+                        <TextBox Text="{Binding NewBranchName}" Watermark="new branch name" />
+                        <Button Classes="subtle" Grid.Column="1"
+                                Content="Create at selected commit / HEAD"
+                                Click="OnCreateBranch"
+                                Margin="4,0,0,0" />
+                    </Grid>
+                    <Grid Grid.Row="3" ColumnDefinitions="Auto,*" Margin="0,4,0,0">
+                        <TextBlock Classes="field-label" Text="Compare with:" VerticalAlignment="Center" Margin="0,0,6,0" />
+                        <ComboBox Grid.Column="1"
+                                  ItemsSource="{Binding Branches}"
+                                  SelectedItem="{Binding CompareBranch}">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate x:DataType="host:GitBranchInfo">
+                                    <TextBlock Text="{Binding Name}" />
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+                    </Grid>
+                    <StackPanel Grid.Row="4" Margin="0,4,0,0" Spacing="4">
+                        <Button Classes="subtle" Content="Compare refs" Click="OnCompareBranches" />
+                        <TextBox Text="{Binding Comparison}"
+                                 IsReadOnly="True"
+                                 AcceptsReturn="True"
+                                 MinHeight="90" />
+                    </StackPanel>
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="Stash">
+                <Grid RowDefinitions="*,Auto,Auto" Margin="4">
+                    <ListBox ItemsSource="{Binding Stashes}"
+                             SelectedItem="{Binding SelectedStash}">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate x:DataType="host:GitStashEntry">
+                                <Grid ColumnDefinitions="90,*,Auto">
+                                    <TextBlock Text="{Binding Reference}" Foreground="#4ec9b0" />
+                                    <TextBlock Grid.Column="1" Text="{Binding Message}" Margin="6,0" />
+                                    <TextBlock Grid.Column="2" Text="{Binding CreatedAt}" Opacity="0.65" />
+                                </Grid>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                    <Grid Grid.Row="1" ColumnDefinitions="*,Auto" Margin="0,4,0,0">
+                        <TextBox Text="{Binding StashMessage}" Watermark="stash message" />
+                        <Button Classes="subtle" Grid.Column="1"
+                                Content="Stash tracked + untracked"
+                                Click="OnCreateStash"
+                                Margin="4,0,0,0" />
+                    </Grid>
+                    <WrapPanel Grid.Row="2" Margin="0,4,0,0">
+                        <Button Classes="subtle" Content="Apply selected" Click="OnApplyStash" />
+                        <Button Classes="subtle" Content="Pop selected" Click="OnPopStash" Margin="4,0,0,0" />
+                    </WrapPanel>
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="Remote">
+                <Grid RowDefinitions="*,Auto,Auto,Auto" Margin="4">
+                    <ListBox ItemsSource="{Binding Remotes}"
+                             SelectedItem="{Binding SelectedRemote}">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate x:DataType="host:GitRemoteInfo">
+                                <StackPanel Margin="0,2">
+                                    <TextBlock Text="{Binding Name}" FontWeight="SemiBold" />
+                                    <TextBlock Text="{Binding FetchUrl}" Opacity="0.7" />
+                                    <TextBlock Text="{Binding PushUrl}" Opacity="0.7" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                    <TextBox Grid.Row="1"
+                             Text="{Binding RemoteBranch}"
+                             Watermark="explicit branch name"
+                             Margin="0,4,0,0" />
+                    <CheckBox Grid.Row="2"
+                              Content="Set upstream on push"
+                              IsChecked="{Binding SetUpstream}"
+                              Margin="0,4,0,0" />
+                    <WrapPanel Grid.Row="3" Margin="0,4,0,0">
+                        <Button Classes="subtle" Content="Fetch selected remote" Click="OnFetch" />
+                        <Button Classes="subtle" Content="Pull --ff-only" Click="OnPull" Margin="4,0,0,0" />
+                        <Button Classes="subtle" Content="Push explicit branch" Click="OnPush" Margin="4,0,0,0" />
+                    </WrapPanel>
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="Evidence">
+                <ListBox ItemsSource="{Binding Evidence}" Margin="4">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate x:DataType="abs:VcsOperationEvidence">
+                            <Border BorderBrush="{DynamicResource StudioBorderBrush}"
+                                    BorderThickness="0,0,0,1"
+                                    Padding="2,5">
+                                <StackPanel>
+                                    <Grid ColumnDefinitions="Auto,Auto,*,Auto">
+                                        <TextBlock Text="{Binding Operation}"
+                                                   FontWeight="SemiBold" />
+                                        <TextBlock Grid.Column="1"
+                                                   Text="{Binding ResultCode}"
+                                                   Margin="8,0"
+                                                   Foreground="#4ec9b0" />
+                                        <TextBlock Grid.Column="2"
+                                                   Text="{Binding RepositoryName}"
+                                                   Opacity="0.75" />
+                                        <TextBlock Grid.Column="3"
+                                                   Text="{Binding DurationSummary}"
+                                                   Opacity="0.65" />
+                                    </Grid>
+                                    <TextBlock Text="{Binding Target}"
+                                               Opacity="0.8"
+                                               TextWrapping="Wrap" />
+                                    <TextBlock Text="{Binding RepositoryState}"
+                                               Opacity="0.8"
+                                               TextWrapping="Wrap" />
+                                    <TextBlock Text="{Binding PathSummary}"
+                                               Opacity="0.8"
+                                               TextWrapping="Wrap" />
+                                    <TextBlock Text="{Binding CorrelationSummary}"
+                                               Opacity="0.8"
+                                               TextWrapping="Wrap" />
+                                </StackPanel>
+                            </Border>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </TabItem>
+        </TabControl>
+
+        <TextBlock Grid.Row="2"
+                   Text="{Binding Status}"
+                   TextWrapping="Wrap"
+                   Margin="0,6,0,0" />
+    </Grid>
+</UserControl>

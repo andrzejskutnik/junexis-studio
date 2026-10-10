@@ -1,0 +1,127 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:host="clr-namespace:Junexis.Studio.Host;assembly=Junexis.Studio.Host"
+             xmlns:abstractions="clr-namespace:Junexis.Studio.Abstractions;assembly=Junexis.Studio.Abstractions"
+             x:DataType="host:DeployCenterViewModel"
+             x:Class="Junexis.Studio.Shell.DeployCenterView">
+    <Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,*,*,Auto,2*" Margin="6">
+        <Grid Grid.Row="0" ColumnDefinitions="*,Auto,Auto,Auto,Auto" ColumnSpacing="6" Margin="0,0,0,8">
+            <TextBlock Text="Deploy Center" FontWeight="SemiBold" VerticalAlignment="Center" />
+            <Button Grid.Column="1" Content="Refresh" Click="Refresh_OnClick" />
+            <Button Grid.Column="2" Content="Prepare" Click="Prepare_OnClick" IsEnabled="{Binding CanPrepare}" />
+            <Button Grid.Column="3" Content="Run Local" Click="RunLocal_OnClick" IsEnabled="{Binding CanRunLocal}" />
+            <Button Grid.Column="4" Content="Adopt Session" Click="AdoptLive_OnClick" IsEnabled="{Binding CanAdoptLive}" />
+        </Grid>
+
+        <TextBlock Grid.Row="1" Text="{Binding StatusText}" TextWrapping="Wrap" Margin="0,0,0,6" />
+        <TextBlock Grid.Row="2" Text="{Binding BuildText}" TextWrapping="Wrap" Margin="0,0,0,6" />
+        <TextBlock Grid.Row="3" Text="{Binding TargetsText}" TextWrapping="Wrap" Margin="0,0,0,6" />
+
+        <Border Grid.Row="4" Padding="6" Margin="0,0,0,6" Classes="panel-card">
+            <Grid RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="Auto,150,*,*" ColumnSpacing="6" RowSpacing="4">
+                <TextBlock Text="Bundle authenticity" FontWeight="SemiBold" VerticalAlignment="Center" />
+                <ComboBox Grid.Column="1"
+                          ItemsSource="{Binding AuthenticityPolicies}"
+                          SelectedItem="{Binding SelectedAuthenticityPolicy, Mode=TwoWay}" />
+                <TextBox Grid.Column="2" Text="{Binding SigningKeyPath, Mode=TwoWay}"
+                         Watermark="Optional external P-256 private key PEM" />
+                <TextBox Grid.Column="3" Text="{Binding SignerName, Mode=TwoWay}"
+                         Watermark="Signer name" />
+                <TextBox Grid.Row="1" Grid.ColumnSpan="4"
+                         Text="{Binding TrustedSignerFingerprintsText, Mode=TwoWay}"
+                         Watermark="Trusted signer SHA-256 fingerprints (space/comma separated)" />
+                <TextBlock Grid.Row="2" Grid.ColumnSpan="4"
+                           Text="{Binding AuthenticityText}" TextWrapping="Wrap" FontSize="11" />
+            </Grid>
+        </Border>
+
+        <Grid Grid.Row="5" ColumnDefinitions="Auto,90,Auto,Auto" ColumnSpacing="6" Margin="0,0,0,6">
+            <TextBlock Text="Duration (s)" VerticalAlignment="Center" />
+            <TextBox Grid.Column="1" Text="{Binding DurationText, Mode=TwoWay}" Watermark="5" />
+            <Button Grid.Column="2" Content="Stop Local" Click="StopLocal_OnClick" IsEnabled="{Binding CanStopLocal}" />
+            <TextBlock Grid.Column="3" Text="{Binding IsDeploying, StringFormat=Running: {0}}" VerticalAlignment="Center" />
+        </Grid>
+
+        <StackPanel Grid.Row="6" Spacing="4" Margin="0,0,0,8">
+            <TextBlock Text="{Binding PreflightText}" TextWrapping="Wrap" />
+            <TextBlock Text="{Binding LocalDeploymentText}" TextWrapping="Wrap" />
+            <Border Padding="6" Classes="panel-card">
+                <StackPanel Spacing="2">
+                    <TextBlock Text="Recovery mode" FontSize="11" />
+                    <TextBlock Text="{Binding RecoveryModeTitle}" FontWeight="SemiBold" />
+                    <TextBlock Text="{Binding RecoveryText}" TextWrapping="Wrap" FontSize="11" />
+                </StackPanel>
+            </Border>
+        </StackPanel>
+
+        <ListBox Grid.Row="7" ItemsSource="{Binding Checks}" Margin="0,0,0,8">
+            <ListBox.ItemTemplate>
+                <DataTemplate x:DataType="abstractions:DeploymentPreflightCheck">
+                    <Border Padding="5" Margin="0,0,0,3" Classes="panel-card">
+                        <StackPanel Spacing="2">
+                            <TextBlock Text="{Binding Code}" FontWeight="SemiBold" />
+                            <TextBlock Text="{Binding Status, StringFormat=Status: {0}}" FontSize="11" />
+                            <TextBlock Text="{Binding Target, StringFormat=Target: {0}}" FontSize="11" />
+                            <TextBlock Text="{Binding Message}" FontSize="11" TextWrapping="Wrap" />
+                        </StackPanel>
+                    </Border>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
+        <ListBox Grid.Row="8" ItemsSource="{Binding LocalTargetStates}" Margin="0,0,0,8">
+            <ListBox.ItemTemplate>
+                <DataTemplate x:DataType="abstractions:DeploymentTargetStatus">
+                    <Border Padding="5" Margin="0,0,0,3" Classes="panel-card">
+                        <StackPanel Spacing="2">
+                            <TextBlock Text="{Binding Target}" FontWeight="SemiBold" />
+                            <TextBlock Text="{Binding Status, StringFormat=Status: {0}}" FontSize="11" />
+                            <TextBlock Text="{Binding Details}" FontSize="11" TextWrapping="Wrap" />
+                        </StackPanel>
+                    </Border>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
+        <Border Grid.Row="9" Padding="6" Margin="0,0,0,8" Classes="panel-card">
+            <Grid RowDefinitions="Auto,Auto,Auto,Auto" RowSpacing="5">
+                <TextBlock Text="Embedded deployment · explicit hardware consent" FontWeight="SemiBold" />
+                <StackPanel Grid.Row="1" Orientation="Horizontal" Spacing="6">
+                    <Button Content="Probe Devices" Click="ProbeEmbedded_OnClick" IsEnabled="{Binding CanProbeEmbedded}" />
+                    <Button Content="Prepare Embedded" Click="PrepareEmbedded_OnClick" IsEnabled="{Binding CanPrepareEmbedded}" />
+                    <Button Content="Select Device" Click="SelectEmbedded_OnClick" IsEnabled="{Binding CanSelectEmbedded}" />
+                    <Button Content="Flash Selected Device" Click="FlashEmbedded_OnClick" IsEnabled="{Binding CanFlashEmbedded}" />
+                </StackPanel>
+                <ListBox Grid.Row="2"
+                         MaxHeight="120"
+                         ItemsSource="{Binding EmbeddedDevices}"
+                         SelectedItem="{Binding SelectedEmbeddedDevice, Mode=TwoWay}">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate x:DataType="abstractions:EmbeddedDeviceCandidate">
+                            <StackPanel Margin="3" Spacing="1">
+                                <TextBlock Text="{Binding Port}" FontWeight="SemiBold" />
+                                <TextBlock Text="{Binding Description}" FontSize="11" />
+                                <TextBlock Text="{Binding HardwareId}" FontSize="10" TextWrapping="Wrap" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+                <StackPanel Grid.Row="3" Spacing="3">
+                    <TextBlock Text="{Binding EmbeddedStatusText}" TextWrapping="Wrap" />
+                    <CheckBox IsChecked="{Binding IsEmbeddedFlashConfirmed, Mode=TwoWay}"
+                              Content="I confirm that the selected physical device may be flashed."
+                              FontSize="11" />
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <ScrollViewer Grid.Row="10"
+                      VerticalScrollBarVisibility="Auto"
+                      HorizontalScrollBarVisibility="Auto">
+            <TextBox Text="{Binding LogText}"
+                     IsReadOnly="True"
+                     AcceptsReturn="True"
+                     TextWrapping="Wrap" />
+        </ScrollViewer>
+    </Grid>
+</UserControl>

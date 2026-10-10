@@ -1,0 +1,27 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:host="clr-namespace:Junexis.Studio.Host;assembly=Junexis.Studio.Host"
+             xmlns:abstractions="clr-namespace:Junexis.Studio.Abstractions;assembly=Junexis.Studio.Abstractions"
+             x:DataType="host:ArtifactExplorerViewModel"
+             x:Class="Junexis.Studio.Shell.ArtifactExplorerView">
+    <Grid RowDefinitions="Auto,*" Margin="6">
+        <TextBlock Grid.Row="0"
+                   Text="{Binding StatusText}"
+                   TextWrapping="Wrap"
+                   Margin="0,0,0,8" />
+        <ListBox Grid.Row="1" ItemsSource="{Binding Items}">
+            <ListBox.ItemTemplate>
+                <DataTemplate x:DataType="abstractions:ArtifactItem">
+                    <Border Padding="5" Margin="0,0,0,3" Classes="panel-card">
+                        <StackPanel Spacing="2">
+                            <TextBlock Text="{Binding RelativePath}" FontWeight="SemiBold" />
+                            <TextBlock Text="{Binding Target, StringFormat=Target: {0}}" FontSize="11" />
+                            <TextBlock Text="{Binding Kind, StringFormat=Kind: {0}}" FontSize="11" />
+                            <TextBlock Text="{Binding Ownership, StringFormat=Ownership: {0}}" FontSize="11" />
+                        </StackPanel>
+                    </Border>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+    </Grid>
+</UserControl>

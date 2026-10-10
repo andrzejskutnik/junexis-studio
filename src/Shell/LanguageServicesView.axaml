@@ -1,0 +1,60 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:host="clr-namespace:Junexis.Studio.Host;assembly=Junexis.Studio.Host"
+             xmlns:abstractions="clr-namespace:Junexis.Studio.Abstractions;assembly=Junexis.Studio.Abstractions"
+             x:DataType="host:LanguageServicesViewModel"
+             x:Class="Junexis.Studio.Shell.LanguageServicesView">
+    <Grid RowDefinitions="Auto,Auto,2*,Auto,3*" Margin="6">
+        <Grid Grid.Row="0" ColumnDefinitions="*,Auto,Auto" Margin="0,0,0,6">
+            <TextBlock Text="Language Servers" FontWeight="SemiBold" VerticalAlignment="Center" />
+            <Button Grid.Column="1" Content="Refresh" Margin="6,0,0,0" Click="Refresh_OnClick" />
+            <Button Grid.Column="2" Content="Restart selected" Margin="6,0,0,0"
+                    IsEnabled="{Binding !IsBusy}" Click="Restart_OnClick" />
+        </Grid>
+
+        <TextBlock Grid.Row="1" Text="{Binding StatusText}" TextWrapping="Wrap" Margin="0,0,0,6" />
+
+        <ListBox Grid.Row="2" ItemsSource="{Binding Statuses}"
+                 SelectedItem="{Binding SelectedStatus}">
+            <ListBox.ItemTemplate>
+                <DataTemplate x:DataType="abstractions:LanguageServerStatus">
+                    <Border Padding="6" Margin="0,0,0,4" Classes="panel-card">
+                        <Grid ColumnDefinitions="150,90,*,Auto" RowDefinitions="Auto,Auto">
+                            <TextBlock Text="{Binding DisplayName}" FontWeight="SemiBold" />
+                            <TextBlock Grid.Column="1" Text="{Binding State}" />
+                            <TextBlock Grid.Column="2" Text="{Binding Message}" TextWrapping="Wrap" />
+                            <TextBlock Grid.Column="3" Text="{Binding RestartCount, StringFormat=Restarts: {0}}"
+                                       FontSize="11" />
+                            <TextBlock Grid.Row="1" Grid.ColumnSpan="4" Text="{Binding ProfileId}"
+                                       FontSize="10" Opacity="0.65" />
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
+        <Grid Grid.Row="3" ColumnDefinitions="*,Auto,Auto" Margin="0,8,0,6">
+            <TextBlock Text="{Binding ReferencesTitle}" FontWeight="SemiBold" VerticalAlignment="Center" />
+            <Button Grid.Column="1" Content="Go to" Margin="6,0,0,0"
+                    IsEnabled="{Binding HasReferences}" Click="Navigate_OnClick" />
+            <Button Grid.Column="2" Content="Clear" Margin="6,0,0,0"
+                    IsEnabled="{Binding HasReferences}" Click="Clear_OnClick" />
+        </Grid>
+
+        <ListBox Grid.Row="4" ItemsSource="{Binding References}"
+                 SelectedItem="{Binding SelectedReference}"
+                 DoubleTapped="References_OnDoubleTapped">
+            <ListBox.ItemTemplate>
+                <DataTemplate x:DataType="host:LanguageReferenceViewItem">
+                    <Border Padding="5" Margin="0,0,0,3" BorderBrush="#343434" BorderThickness="1">
+                        <StackPanel>
+                            <TextBlock Text="{Binding DisplayLocation}" FontWeight="SemiBold" />
+                            <TextBlock Text="{Binding Preview}" FontFamily="Consolas" FontSize="11"
+                                       TextTrimming="CharacterEllipsis" Opacity="0.8" />
+                        </StackPanel>
+                    </Border>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+    </Grid>
+</UserControl>

@@ -1,0 +1,30 @@
+{
+  "schemaVersion": "junexis.studio-build-receipt/0.1",
+  "releaseVersion": "0.19.0-preview.1",
+  "rid": "linux-x64",
+  "system": "linux",
+  "architecture": "x64",
+  "entrypoint": "junexis-studio",
+  "selfContained": true,
+  "artifact": {
+    "file": "junexis-studio-0.19.0-preview.1-linux-x64.tar.gz",
+    "sizeBytes": 47588189,
+    "sha256": "6613c8895ea20384a022b8cc8aad9b02c3faae7fe01b177fc90d03a92d1e11a4"
+  },
+  "proof": {
+    "kind": "native-studio-smoke",
+    "hostRid": "linux-x64",
+    "checks": [
+      {
+        "component": "studio",
+        "command": "junexis-studio --distribution-manifest",
+        "exitCode": 0
+      },
+      {
+        "component": "profile",
+        "command": "junexis-studio --profile-probe",
+        "exitCode": 0
+      }
+    ]
+  }
+}

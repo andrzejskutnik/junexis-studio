@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Junexis mark: an abstract "nexus" (hub/node) glyph — three channels
+  (chan/queue/stream) converging on a central node. No letterform, by design
+  (see junexis-lang AGENTS.md ADR D1: communication as a first-class citizen).
+  The monochrome silhouette is reused as StudioIconLogo in Styles/StudioIcons.axaml.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <linearGradient id="junexisAccent" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#3794C7" />
+      <stop offset="100%" stop-color="#007ACC" />
+    </linearGradient>
+  </defs>
+
+  <!-- Badge background -->
+  <rect x="1" y="1" width="62" height="62" rx="14" fill="url(#junexisAccent)" />
+
+  <!-- Spokes: three channels converging on the hub -->
+  <path d="M30,15 L34,15 L34,21 L30,21 Z" fill="#FFFFFF" opacity="0.9" />
+  <path d="M17,44 L14,40 L21,36 L24,40 Z" fill="#FFFFFF" opacity="0.9" />
+  <path d="M47,44 L50,40 L43,36 L40,40 Z" fill="#FFFFFF" opacity="0.9" />
+
+  <!-- Three satellite nodes -->
+  <circle cx="32" cy="9" r="6" fill="#FFFFFF" />
+  <circle cx="11" cy="47" r="6" fill="#FFFFFF" />
+  <circle cx="53" cy="47" r="6" fill="#FFFFFF" />
+
+  <!-- Central hub node, where the channels meet -->
+  <circle cx="32" cy="32" r="11" fill="#FFFFFF" />
+</svg>

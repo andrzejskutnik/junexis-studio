@@ -1,0 +1,21 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="Junexis.Studio.Shell.ConfirmWindow"
+        Width="420"
+        Height="150"
+        CanResize="False"
+        WindowStartupLocation="CenterOwner"
+        Title="Confirm">
+    <Grid RowDefinitions="*,Auto" Margin="16">
+        <TextBlock x:Name="ConfirmMessage"
+                   TextWrapping="Wrap"
+                   VerticalAlignment="Center" />
+        <StackPanel Grid.Row="1"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Right"
+                    Spacing="8">
+            <Button Content="Cancel" Click="OnCancel" MinWidth="88" IsCancel="True" />
+            <Button Content="OK" Click="OnConfirm" MinWidth="88" IsDefault="True" />
+        </StackPanel>
+    </Grid>
+</Window>

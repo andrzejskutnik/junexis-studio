@@ -1,0 +1,120 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:host="clr-namespace:Junexis.Studio.Host;assembly=Junexis.Studio.Host"
+             x:DataType="host:HelpCenterViewModel"
+             x:Class="Junexis.Studio.Shell.HelpCenterView">
+    <Grid RowDefinitions="Auto,Auto,*,Auto"
+          Margin="8">
+        <StackPanel Orientation="Horizontal"
+                    Spacing="7"
+                    Margin="0,0,0,8">
+            <PathIcon Width="18"
+                      Height="18"
+                      Data="{StaticResource StudioIconWhy}"
+                      Foreground="{DynamicResource StudioAccentBrush}" />
+            <TextBlock Text="Help Center"
+                       FontSize="16"
+                       FontWeight="SemiBold"
+                       VerticalAlignment="Center" />
+        </StackPanel>
+
+        <ComboBox Grid.Row="1"
+                  ItemsSource="{Binding Topics}"
+                  SelectedItem="{Binding SelectedTopic}"
+                  Margin="0,0,0,10"
+                  AutomationProperties.Name="Help topic">
+            <ComboBox.ItemTemplate>
+                <DataTemplate x:DataType="host:HelpTopic">
+                    <TextBlock Text="{Binding Title}" />
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+        </ComboBox>
+
+        <ScrollViewer Grid.Row="2">
+            <StackPanel Spacing="8">
+                <TextBlock Text="{Binding SelectedTopic.Title}"
+                           FontSize="19"
+                           FontWeight="SemiBold"
+                           TextWrapping="Wrap" />
+                <TextBlock Text="{Binding SelectedTopic.Summary}"
+                           Foreground="{DynamicResource StudioMutedTextBrush}"
+                           TextWrapping="Wrap"
+                           Margin="0,0,0,6" />
+
+                <TextBlock Text="DO THIS"
+                           Classes="studio-section"
+                           Margin="0,6,0,0" />
+                <ItemsControl ItemsSource="{Binding SelectedTopic.Steps}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Grid ColumnDefinitions="Auto,*"
+                                  Margin="0,3">
+                                <TextBlock Text="•"
+                                           Foreground="{DynamicResource StudioAccentBrush}"
+                                           Margin="0,0,7,0" />
+                                <TextBlock Grid.Column="1"
+                                           Text="{Binding}"
+                                           TextWrapping="Wrap" />
+                            </Grid>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+
+                <TextBlock Text="SUCCESS LOOKS LIKE"
+                           Classes="studio-section"
+                           Margin="0,10,0,0" />
+                <ItemsControl ItemsSource="{Binding SelectedTopic.SuccessChecks}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Grid ColumnDefinitions="Auto,*"
+                                  Margin="0,3">
+                                <TextBlock Text="✓"
+                                           Foreground="#4EC9B0"
+                                           Margin="0,0,7,0" />
+                                <TextBlock Grid.Column="1"
+                                           Text="{Binding}"
+                                           TextWrapping="Wrap" />
+                            </Grid>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+
+                <Border Background="{DynamicResource StudioControlBackgroundBrush}"
+                        BorderBrush="{DynamicResource StudioBorderBrush}"
+                        BorderThickness="1"
+                        CornerRadius="3"
+                        Padding="8"
+                        Margin="0,10,0,0">
+                    <StackPanel>
+                        <TextBlock Text="DOCUMENTATION PATH"
+                                   Classes="studio-section" />
+                        <TextBlock Text="{Binding SelectedTopic.Documentation}"
+                                   Margin="0,3,0,0"
+                                   Foreground="{DynamicResource StudioAccentBrush}"
+                                   TextWrapping="Wrap" />
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+        </ScrollViewer>
+
+        <WrapPanel Grid.Row="3"
+                   Margin="0,10,0,0">
+            <Button Content="Open Folder"
+                    Margin="0,0,5,5"
+                    Tag="workspace.openFolder"
+                    Click="OnCommandClick" />
+            <Button Content="Check Toolchains"
+                    Margin="0,0,5,5"
+                    Tag="toolchains.doctor.refresh"
+                    Click="OnCommandClick" />
+            <Button Content="Problems"
+                    Margin="0,0,5,5"
+                    Tag="view.problems"
+                    Click="OnCommandClick" />
+            <Button Content="Output"
+                    Margin="0,0,5,5"
+                    Tag="help.openOutput"
+                    Click="OnCommandClick" />
+        </WrapPanel>
+    </Grid>
+</UserControl>

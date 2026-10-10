@@ -1,0 +1,31 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:host="clr-namespace:Junexis.Studio.Host;assembly=Junexis.Studio.Host"
+             x:Class="Junexis.Studio.Shell.AgentReportPanelView"
+             x:DataType="host:AgentReportPanelViewModel">
+    <StackPanel Margin="12" Spacing="8">
+        <TextBlock Text="AGENT REPORT" FontSize="12" FontWeight="Bold" />
+        <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto,Auto,Auto" RowSpacing="6">
+            <TextBlock Grid.Row="0" Text="Status" Opacity="0.7" Margin="0,0,12,0" />
+            <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Status}" />
+            <TextBlock Grid.Row="1" Text="Goal" Opacity="0.7" Margin="0,0,12,0" />
+            <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding Goal}" TextWrapping="Wrap" />
+            <TextBlock Grid.Row="2" Text="Changed files" Opacity="0.7" Margin="0,0,12,0" />
+            <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding ChangedFiles}" />
+            <TextBlock Grid.Row="3" Text="Files" Opacity="0.7" Margin="0,0,12,0" />
+            <ListBox Grid.Row="3" Grid.Column="1" ItemsSource="{Binding ChangedFileItems}" x:Name="ChangedFilesList">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Grid ColumnDefinitions="Auto,*" ColumnSpacing="8">
+                            <TextBlock Grid.Column="0" Text="{Binding Status}" Opacity="0.7" />
+                            <StackPanel Grid.Column="1" Spacing="3">
+                                <Button Content="{Binding Path}" HorizontalAlignment="Left" Padding="0" Background="Transparent" Click="OnChangedFileClick" />
+                                <TextBlock Text="{Binding Diff}" FontFamily="Consolas,Monospace" FontSize="11" TextWrapping="Wrap" Opacity="0.85" />
+                            </StackPanel>
+                        </Grid>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </Grid>
+    </StackPanel>
+</UserControl>

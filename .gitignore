@@ -1,0 +1,22 @@
+
+# Ignore VS Code / tooling
+.vscode/
+.vs/
+.idea/
+
+# Ignore .NET build output
+**/bin/
+**/obj/
+.artifacts/
+
+# Ignore user-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Ignore logs
+*.log
+
+# Ignore vscode AI rules
+.github/instructions/codacy.instructions.md

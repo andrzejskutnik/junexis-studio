@@ -1,0 +1,433 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Style Selector="Window">
+        <Setter Property="Background" Value="{DynamicResource StudioEditorBackgroundBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource StudioTextBrush}" />
+        <Setter Property="FontFamily" Value="Segoe UI,Arial,sans-serif" />
+        <Setter Property="FontSize" Value="14" />
+    </Style>
+
+    <Style Selector="Menu">
+        <Setter Property="Background" Value="{DynamicResource StudioMenuBackgroundBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource StudioTextBrush}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource StudioBorderBrush}" />
+        <Setter Property="BorderThickness" Value="0,0,0,1" />
+        <Setter Property="Padding" Value="4,1" />
+    </Style>
+
+    <Style Selector="MenuItem">
+        <Setter Property="Padding" Value="8,4" />
+        <Setter Property="FontSize" Value="13" />
+    </Style>
+
+    <Style Selector="Button">
+        <Setter Property="Background" Value="{DynamicResource StudioControlBackgroundBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource StudioTextBrush}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource StudioControlBorderBrush}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="CornerRadius" Value="3" />
+        <Setter Property="Padding" Value="8,3" />
+        <Setter Property="MinHeight" Value="24" />
+    </Style>
+
+    <Style Selector="Button:pointerover">
+        <Setter Property="Background" Value="{DynamicResource StudioHoverBrush}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource StudioHoverBorderBrush}" />
+    </Style>
+
+    <Style Selector="Button:pressed">
+        <Setter Property="Background" Value="{DynamicResource StudioPressedBrush}" />
+    </Style>
+
+    <Style Selector="Button:disabled">
+        <Setter Property="Opacity" Value="0.45" />
+    </Style>
+
+    <!-- Subtle/soft variant for secondary actions in dense inspector-style panels (e.g. Why?). -->
+    <Style Selector="Button.subtle">
+        <Setter Property="Background" Value="{DynamicResource StudioInputBackgroundBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource StudioMutedTextBrush}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource StudioBorderBrush}" />
+        <Setter Property="CornerRadius" Value="4" />
+        <Setter Property="Padding" Value="7,3" />
+        <Setter Property="FontSize" Value="12" />
+        <Setter Property="MinHeight" Value="22" />
+    </Style>
+
+    <Style Selector="Button.subtle:pointerover">
+        <Setter Property="Background" Value="{DynamicResource StudioHoverBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource StudioTextBrush}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource StudioHoverBorderBrush}" />
+    </Style>
+
+    <Style Selector="Button.subtle:pressed">
+        <Setter Property="Background" Value="{DynamicResource StudioPressedBrush}" />
+    </Style>
+
+    <!-- Smaller, quieter checkbox app-wide (was oversized/bright FluentTheme default). -->
+    <Style Selector="CheckBox">
+        <Setter Property="FontSize" Value="12" />
+        <Setter Property="Foreground" Value="{DynamicResource StudioMutedTextBrush}" />
+        <Setter Property="MinHeight" Value="20" />
+        <Setter Property="RenderTransform" Value="scale(0.85)" />
+        <Setter Property="RenderTransformOrigin" Value="0,0.5" />
+    </Style>
+
+    <Style Selector="CheckBox:checked">
+        <Setter Property="Foreground" Value="{DynamicResource StudioTextBrush}" />
+    </Style>
+
+    <!-- Label half of a "Label: value" row; pair with a Grid column using SharedSizeGroup to align across sections. -->
+    <Style Selector="TextBlock.field-label">
+        <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="FontSize" Value="12.5" />
+        <Setter Property="Foreground" Value="{DynamicResource StudioMutedTextBrush}" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+    </Style>
+
+    <!-- Value half of a "Label: value" row; slightly different (monospace) face reads as "data", not prose. -->
+    <Style Selector="TextBlock.field-value">
+        <Setter Property="FontFamily" Value="Cascadia Code,Consolas,monospace" />
+        <Setter Property="FontSize" Value="12.5" />
+        <Setter Property="Foreground" Value="{DynamicResource StudioTextBrush}" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+    </Style>
+
+    <!-- Soft card container for grouped fields, replacing hard-coded borders. -->
+    <Style Selector="Border.panel-card">
+        <Setter Property="Background" Value="{DynamicResource StudioPanelBackgroundBrush}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource StudioBorderBrush}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="CornerRadius" Value="6" />
+        <Setter Property="Padding" Value="8" />
+    </Style>
+
+    <Style Selector="TextBox">
+        <Setter Property="Background" Value="{DynamicResource StudioInputBackgroundBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource StudioTextBrush}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource StudioControlBorderBrush}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="CornerRadius" Value="3" />
+        <Setter Property="Padding" Value="6,3" />
+        <Setter Property="MinHeight" Value="24" />
+    </Style>
+
+    <Style Selector="TextBox:focus">
+        <Setter Property="BorderBrush" Value="{DynamicResource StudioAccentBrush}" />
+    </Style>
+
+    <Style Selector="ComboBox">
+        <Setter Property="Background" Value="{DynamicResource StudioInputBackgroundBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource StudioTextBrush}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource StudioControlBorderBrush}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="CornerRadius" Value="3" />
+        <Setter Property="MinHeight" Value="24" />
+    </Style>
+
+    <Style Selector="ListBox">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="0" />
+    </Style>
+
+    <Style Selector="ListBoxItem">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Padding" Value="5,3" />
+        <Setter Property="CornerRadius" Value="3" />
+    </Style>
+
+    <Style Selector="ListBoxItem:pointerover">
+        <Setter Property="Background" Value="{DynamicResource StudioHoverBrush}" />
+    </Style>
+
+    <Style Selector="ListBoxItem:selected">
+        <Setter Property="Background" Value="{DynamicResource StudioSelectionBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource StudioTextBrush}" />
+    </Style>
+
+    <Style Selector="ListBoxItem:selected:pointerover">
+        <Setter Property="Background" Value="{DynamicResource StudioSelectionBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource StudioTextBrush}" />
+    </Style>
+
+    <Style Selector="ListBoxItem:selected:focus">
+        <Setter Property="Background" Value="{DynamicResource StudioSelectionBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource StudioTextBrush}" />
+    </Style>
+
+    <Style Selector="ListBoxItem:selected:focus:pointerover">
+        <Setter Property="Background" Value="{DynamicResource StudioSelectionBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource StudioTextBrush}" />
+    </Style>
+
+    <Style Selector="TreeView">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="0" />
+    </Style>
+
+    <Style Selector="TreeViewItem">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Padding" Value="2,1" />
+    </Style>
+
+    <Style Selector="TreeViewItem:pointerover">
+        <Setter Property="Background" Value="{DynamicResource StudioHoverBrush}" />
+    </Style>
+
+    <Style Selector="TreeViewItem:selected">
+        <Setter Property="Background" Value="{DynamicResource StudioSelectionBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource StudioTextBrush}" />
+    </Style>
+
+    <Style Selector="TreeViewItem:selected:pointerover">
+        <Setter Property="Background" Value="{DynamicResource StudioSelectionBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource StudioTextBrush}" />
+    </Style>
+
+    <Style Selector="TreeViewItem:selected:focus">
+        <Setter Property="Background" Value="{DynamicResource StudioSelectionBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource StudioTextBrush}" />
+    </Style>
+
+    <Style Selector="TreeViewItem:selected:focus:pointerover">
+        <Setter Property="Background" Value="{DynamicResource StudioSelectionBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource StudioTextBrush}" />
+    </Style>
+
+    <Style Selector="TabControl">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="0" />
+    </Style>
+
+    <Style Selector="TabItem">
+        <Setter Property="Background" Value="{DynamicResource StudioTabBackgroundBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource StudioMutedTextBrush}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource StudioBorderBrush}" />
+        <Setter Property="BorderThickness" Value="0,0,1,1" />
+        <Setter Property="Padding" Value="8,3" />
+        <Setter Property="MinHeight" Value="26" />
+        <Setter Property="FontSize" Value="13" />
+    </Style>
+
+    <Style Selector="TabItem:pointerover">
+        <Setter Property="Background" Value="{DynamicResource StudioHoverBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource StudioTextBrush}" />
+    </Style>
+
+    <Style Selector="TabItem:selected">
+        <Setter Property="Background" Value="{DynamicResource StudioEditorBackgroundBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource StudioTextBrush}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource StudioAccentBrush}" />
+        <Setter Property="BorderThickness" Value="0,1,0,0" />
+    </Style>
+
+    <Style Selector="GridSplitter">
+        <Setter Property="Background" Value="{DynamicResource StudioBorderBrush}" />
+    </Style>
+
+    <Style Selector="Separator">
+        <Setter Property="Background" Value="{DynamicResource StudioBorderBrush}" />
+    </Style>
+
+    <Style Selector="ToolTip">
+        <Setter Property="Background" Value="{DynamicResource StudioPopupBackgroundBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource StudioTextBrush}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource StudioControlBorderBrush}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="CornerRadius" Value="2" />
+        <Setter Property="Padding" Value="6,4" />
+    </Style>
+
+    <Style Selector="TextBlock.studio-section">
+        <Setter Property="Foreground" Value="{DynamicResource StudioMutedTextBrush}" />
+        <Setter Property="FontSize" Value="11" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+    </Style>
+
+    <Style Selector="TextBlock.studio-caption">
+        <Setter Property="Foreground" Value="{DynamicResource StudioMutedTextBrush}" />
+        <Setter Property="FontSize" Value="13" />
+    </Style>
+
+    <Style Selector="Button.welcome-link">
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
+        <Setter Property="HorizontalContentAlignment" Value="Left" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Foreground" Value="{DynamicResource StudioAccentBrush}" />
+        <Setter Property="Padding" Value="4,3" />
+    </Style>
+
+    <Style Selector="Button.welcome-link:pointerover">
+        <Setter Property="Background" Value="{DynamicResource StudioHoverBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource StudioTextBrush}" />
+    </Style>
+
+    <Style Selector="Button.welcome-recent">
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
+        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Padding" Value="5,5" />
+        <Setter Property="Margin" Value="0,1" />
+    </Style>
+
+    <Style Selector="Button.welcome-recent:pointerover">
+        <Setter Property="Background" Value="{DynamicResource StudioHoverBrush}" />
+    </Style>
+
+    <Style Selector="Button.activity-button">
+        <Setter Property="Width" Value="42" />
+        <Setter Property="Height" Value="42" />
+        <Setter Property="MinHeight" Value="42" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Foreground" Value="{DynamicResource StudioMutedTextBrush}" />
+        <Setter Property="BorderBrush" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="2,0,0,0" />
+        <Setter Property="CornerRadius" Value="0" />
+    </Style>
+
+    <Style Selector="Button.activity-button:pointerover">
+        <Setter Property="Background" Value="{DynamicResource StudioHoverBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource StudioTextBrush}" />
+        <Setter Property="BorderBrush" Value="Transparent" />
+    </Style>
+
+    <Style Selector="Button.activity-button.active">
+        <Setter Property="Background" Value="{DynamicResource StudioPressedBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource StudioTextBrush}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource StudioAccentBrush}" />
+    </Style>
+
+    <Style Selector="Button.activity-button.active:pointerover">
+        <Setter Property="BorderBrush" Value="{DynamicResource StudioAccentBrush}" />
+    </Style>
+
+    <Style Selector="Button.activity-button:focus-visible">
+        <Setter Property="BorderBrush" Value="{DynamicResource StudioAccentBrush}" />
+    </Style>
+
+    <Style Selector="PathIcon.activity-icon">
+        <Setter Property="Width" Value="22" />
+        <Setter Property="Height" Value="22" />
+        <Setter Property="HorizontalAlignment" Value="Center" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+    </Style>
+
+    <Style Selector="PathIcon.studio-icon">
+        <Setter Property="Width" Value="16" />
+        <Setter Property="Height" Value="16" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+    </Style>
+
+    <Style Selector="PathIcon.compact-icon">
+        <Setter Property="Width" Value="15" />
+        <Setter Property="Height" Value="15" />
+    </Style>
+
+    <Style Selector="Border.activity-badge">
+        <Setter Property="Background" Value="{DynamicResource StudioAccentBrush}" />
+        <Setter Property="CornerRadius" Value="7" />
+        <Setter Property="MinWidth" Value="14" />
+        <Setter Property="Height" Value="14" />
+        <Setter Property="Padding" Value="3,0" />
+        <Setter Property="HorizontalAlignment" Value="Right" />
+        <Setter Property="VerticalAlignment" Value="Top" />
+        <Setter Property="Margin" Value="0,-3,-8,0" />
+    </Style>
+
+    <Style Selector="Border.activity-badge TextBlock">
+        <Setter Property="Foreground" Value="White" />
+        <Setter Property="FontSize" Value="9" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="HorizontalAlignment" Value="Center" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+    </Style>
+
+    <Style Selector="Button.panel-overflow">
+        <Setter Property="Width" Value="28" />
+        <Setter Property="Height" Value="26" />
+        <Setter Property="MinHeight" Value="26" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="Background" Value="{DynamicResource StudioPanelBackgroundBrush}" />
+        <Setter Property="BorderBrush" Value="Transparent" />
+        <Setter Property="CornerRadius" Value="2" />
+    </Style>
+
+    <Style Selector="Button.panel-overflow:pointerover">
+        <Setter Property="Background" Value="{DynamicResource StudioHoverBrush}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource StudioControlBorderBrush}" />
+    </Style>
+
+    <Style Selector="Border.workbench-runbar">
+        <Setter Property="Background" Value="{DynamicResource StudioMenuBackgroundBrush}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource StudioBorderBrush}" />
+        <Setter Property="BorderThickness" Value="0,0,0,1" />
+        <Setter Property="Padding" Value="8,4" />
+    </Style>
+
+    <Style Selector="TextBlock.workbench-context">
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="Foreground" Value="{DynamicResource StudioMutedTextBrush}" />
+        <Setter Property="FontSize" Value="13" />
+        <Setter Property="TextTrimming" Value="CharacterEllipsis" />
+    </Style>
+
+    <Style Selector="TextBlock.workbench-status">
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="Foreground" Value="{DynamicResource StudioMutedTextBrush}" />
+        <Setter Property="FontSize" Value="12" />
+        <Setter Property="TextTrimming" Value="CharacterEllipsis" />
+        <Setter Property="Margin" Value="4,0,8,0" />
+    </Style>
+
+    <Style Selector="Button.workbench-action">
+        <Setter Property="Height" Value="28" />
+        <Setter Property="MinHeight" Value="28" />
+        <Setter Property="MinWidth" Value="44" />
+        <Setter Property="Margin" Value="2,0" />
+        <Setter Property="Padding" Value="7,2" />
+        <Setter Property="FontSize" Value="13" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderBrush" Value="Transparent" />
+    </Style>
+
+    <Style Selector="Button.workbench-action:pointerover">
+        <Setter Property="Background" Value="{DynamicResource StudioHoverBrush}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource StudioControlBorderBrush}" />
+    </Style>
+
+    <Style Selector="Button.workbench-action:focus-visible">
+        <Setter Property="BorderBrush" Value="{DynamicResource StudioAccentBrush}" />
+    </Style>
+
+    <Style Selector="Button.workbench-action.primary">
+        <Setter Property="Foreground" Value="{DynamicResource StudioAccentBrush}" />
+    </Style>
+
+    <Style Selector="Button.workbench-action.compact">
+        <Setter Property="MinWidth" Value="28" />
+        <Setter Property="Padding" Value="4,2" />
+    </Style>
+
+    <Style Selector="Button.workbench-action.narrative">
+        <Setter Property="Foreground" Value="{DynamicResource StudioAccentBrush}" />
+        <Setter Property="FontStyle" Value="Italic" />
+    </Style>
+
+    <Style Selector="Button.search-result">
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
+        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Padding" Value="4,3" />
+        <Setter Property="CornerRadius" Value="2" />
+    </Style>
+
+    <Style Selector="Button.search-result:pointerover">
+        <Setter Property="Background" Value="{DynamicResource StudioHoverBrush}" />
+    </Style>
+</Styles>

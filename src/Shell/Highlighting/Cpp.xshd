@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- C/C++ syntax highlighting — VS Code Dark+ inspired color scheme -->
+<SyntaxDefinition name="C++" extensions=".cpp;.c;.h;.hpp;.cc;.cxx;.hxx" xmlns="http://icsharpcode.net/sharpdevelop/syntaxdefinition/2008">
+
+  <!-- Color palette -->
+  <Color name="Comment"     foreground="#6A9955" />
+  <Color name="String"      foreground="#CE9178" />
+  <Color name="Char"        foreground="#CE9178" />
+  <Color name="Number"      foreground="#B5CEA8" />
+  <Color name="Preprocessor" foreground="#C586C0" />
+  <Color name="Keyword"     foreground="#569CD6" />    <!-- blue: storage, modifiers, OOP -->
+  <Color name="Type"        foreground="#4EC9B0" />    <!-- teal: primitive types + stdint -->
+  <Color name="ControlFlow" foreground="#C586C0" />    <!-- purple: if/else/while/for/return -->
+  <Color name="Operator"    foreground="#D4D4D4" />
+
+  <RuleSet ignoreCase="false">
+
+    <!-- Preprocessor directives -->
+    <Span color="Preprocessor" multiline="false">
+      <Begin>^\s*\#</Begin>
+      <End>$</End>
+    </Span>
+
+    <!-- Block comment -->
+    <Span color="Comment" multiline="true">
+      <Begin>/\*</Begin>
+      <End>\*/</End>
+    </Span>
+
+    <!-- Line comment -->
+    <Span color="Comment" multiline="false">
+      <Begin>//</Begin>
+      <End>$</End>
+    </Span>
+
+    <!-- String literal (with escape handling) -->
+    <Span color="String" multiline="false">
+      <Begin>"</Begin>
+      <End>"</End>
+      <RuleSet>
+        <Span begin="\\" end="." />
+      </RuleSet>
+    </Span>
+
+    <!-- Char literal -->
+    <Span color="Char" multiline="false">
+      <Begin>'</Begin>
+      <End>'</End>
+    </Span>
+
+    <!-- Numbers: int, hex, float, size suffixes -->
+    <Rule color="Number">\b(0x[\da-fA-F]+|0b[01]+|\d+(\.\d+)?([eE][+-]?\d+)?)(u|U|l|L|ul|UL|ull|ULL|f|F)?\b</Rule>
+
+    <!-- Control flow — purple like VS Code -->
+    <Keywords color="ControlFlow">
+      <Word>if</Word>
+      <Word>else</Word>
+      <Word>while</Word>
+      <Word>for</Word>
+      <Word>do</Word>
+      <Word>switch</Word>
+      <Word>case</Word>
+      <Word>default</Word>
+      <Word>break</Word>
+      <Word>continue</Word>
+      <Word>return</Word>
+      <Word>goto</Word>
+    </Keywords>
+
+    <!-- Primitive / built-in types — teal -->
+    <Keywords color="Type">
+      <Word>void</Word>
+      <Word>bool</Word>
+      <Word>char</Word>
+      <Word>int</Word>
+      <Word>long</Word>
+      <Word>short</Word>
+      <Word>float</Word>
+      <Word>double</Word>
+      <Word>unsigned</Word>
+      <Word>signed</Word>
+      <Word>wchar_t</Word>
+      <Word>char8_t</Word>
+      <Word>char16_t</Word>
+      <Word>char32_t</Word>
+      <!-- stdint -->
+      <Word>uint8_t</Word>
+      <Word>uint16_t</Word>
+      <Word>uint32_t</Word>
+      <Word>uint64_t</Word>
+      <Word>int8_t</Word>
+      <Word>int16_t</Word>
+      <Word>int32_t</Word>
+      <Word>int64_t</Word>
+      <Word>size_t</Word>
+      <Word>ptrdiff_t</Word>
+      <Word>nullptr</Word>
+      <Word>true</Word>
+      <Word>false</Word>
+      <Word>NULL</Word>
+    </Keywords>
+
+    <!-- Storage, modifiers, OOP keywords — blue -->
+    <Keywords color="Keyword">
+      <Word>static</Word>
+      <Word>const</Word>
+      <Word>constexpr</Word>
+      <Word>consteval</Word>
+      <Word>constinit</Word>
+      <Word>extern</Word>
+      <Word>inline</Word>
+      <Word>volatile</Word>
+      <Word>mutable</Word>
+      <Word>register</Word>
+      <Word>auto</Word>
+      <Word>virtual</Word>
+      <Word>override</Word>
+      <Word>final</Word>
+      <Word>explicit</Word>
+      <Word>noexcept</Word>
+      <Word>class</Word>
+      <Word>struct</Word>
+      <Word>union</Word>
+      <Word>enum</Word>
+      <Word>namespace</Word>
+      <Word>using</Word>
+      <Word>typedef</Word>
+      <Word>template</Word>
+      <Word>typename</Word>
+      <Word>public</Word>
+      <Word>private</Word>
+      <Word>protected</Word>
+      <Word>new</Word>
+      <Word>delete</Word>
+      <Word>this</Word>
+      <Word>operator</Word>
+      <Word>sizeof</Word>
+      <Word>alignof</Word>
+      <Word>decltype</Word>
+      <Word>static_assert</Word>
+      <Word>static_cast</Word>
+      <Word>dynamic_cast</Word>
+      <Word>reinterpret_cast</Word>
+      <Word>const_cast</Word>
+      <Word>try</Word>
+      <Word>catch</Word>
+      <Word>throw</Word>
+      <Word>friend</Word>
+      <Word>typedef</Word>
+      <Word>concept</Word>
+      <Word>requires</Word>
+      <Word>co_await</Word>
+      <Word>co_return</Word>
+      <Word>co_yield</Word>
+    </Keywords>
+
+  </RuleSet>
+</SyntaxDefinition>

@@ -1,0 +1,49 @@
+﻿theme: Dark
+editor:
+  fontFamily: Cascadia Code,Consolas,Menlo,monospace
+  fontSize: 14
+  tabSize: 4
+  wordWrap: false
+  autoSave: false
+  showLineNumbers: true
+syntax:
+  junexis:
+    comment: '#6A9955'
+    docComment: '#608B4E'
+    string: '#CE9178'
+    number: '#B5CEA8'
+    keyword: '#569CD6'
+    controlFlow: '#C586C0'
+    declaration: '#569CD6'
+    type: '#4EC9B0'
+    function: '#FFE484'
+    operator: '#D4D4D4'
+    booleanNull: '#569CD6'
+    modifier: '#569CD6'
+    extra:
+      Communication: '#4EC9B0'
+      Resilience: '#D7BA7D'
+      Lifecycle: '#D7BA7D'
+      PlatformAnnotation: '#D16969'
+      NarrativeAttribute: '#DCDCAA'
+      PrimitiveType: '#4EC9B0'
+      Duration: '#B5CEA8'
+      InterpolatedString: '#CE9178'
+      CommunicationOp: '#4EC9B0'
+      PipelineOp: '#4EC9B0'
+  cSharp:
+    comment: '#6A9955'
+    docComment: '#608B4E'
+    string: '#CE9178'
+    number: '#B5CEA8'
+    keyword: '#569CD6'
+    controlFlow: '#C586C0'
+    declaration: '#569CD6'
+    type: '#4EC9B0'
+    function: '#DCDCAA'
+    operator: '#D4D4D4'
+    booleanNull: '#569CD6'
+    modifier: '#569CD6'
+    extra:
+      Preprocessor: '#9B9B9B'
+      Namespace: '#4EC9B0'

@@ -1,0 +1,33 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="Junexis.Studio.Shell.UnsavedChangesWindow"
+        Title="Unsaved Changes"
+        Width="420" Height="160"
+        WindowStartupLocation="CenterOwner"
+        CanResize="False"
+        ShowInTaskbar="False">
+    <Grid RowDefinitions="*,Auto" Margin="20">
+        <TextBlock Grid.Row="0"
+                   x:Name="MessageText"
+                   TextWrapping="Wrap"
+                   VerticalAlignment="Center" />
+        <StackPanel Grid.Row="1"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Right"
+                    Spacing="8">
+            <Button x:Name="SaveButton"
+                    Content="Save"
+                    Width="80"
+                    Click="OnSave" />
+            <Button x:Name="DiscardButton"
+                    Content="Discard"
+                    Width="80"
+                    Click="OnDiscard" />
+            <Button x:Name="CancelButton"
+                    Content="Cancel"
+                    Width="80"
+                    IsDefault="False"
+                    Click="OnCancel" />
+        </StackPanel>
+    </Grid>
+</Window>

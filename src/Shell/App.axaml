@@ -1,0 +1,63 @@
+<Application xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="Junexis.Studio.Shell.App"
+             RequestedThemeVariant="Dark">
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceInclude Source="avares://Junexis.Studio.Shell/Styles/StudioIcons.axaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <ResourceDictionary.ThemeDictionaries>
+                <ResourceDictionary x:Key="Dark">
+                    <SolidColorBrush x:Key="StudioWindowBackgroundBrush">#181818</SolidColorBrush>
+                    <SolidColorBrush x:Key="StudioMenuBackgroundBrush">#181818</SolidColorBrush>
+                    <SolidColorBrush x:Key="StudioSideBackgroundBrush">#181818</SolidColorBrush>
+                    <SolidColorBrush x:Key="StudioEditorBackgroundBrush">#1F1F1F</SolidColorBrush>
+                    <SolidColorBrush x:Key="StudioPanelBackgroundBrush">#181818</SolidColorBrush>
+                    <SolidColorBrush x:Key="StudioTabBackgroundBrush">#181818</SolidColorBrush>
+                    <SolidColorBrush x:Key="StudioInputBackgroundBrush">#242424</SolidColorBrush>
+                    <SolidColorBrush x:Key="StudioControlBackgroundBrush">#2A2A2A</SolidColorBrush>
+                    <SolidColorBrush x:Key="StudioPopupBackgroundBrush">#252526</SolidColorBrush>
+                    <SolidColorBrush x:Key="StudioBorderBrush">#2B2B2B</SolidColorBrush>
+                    <SolidColorBrush x:Key="StudioControlBorderBrush">#3A3A3A</SolidColorBrush>
+                    <SolidColorBrush x:Key="StudioHoverBorderBrush">#505050</SolidColorBrush>
+                    <SolidColorBrush x:Key="StudioHoverBrush">#2A2D2E</SolidColorBrush>
+                    <SolidColorBrush x:Key="StudioPressedBrush">#333638</SolidColorBrush>
+                    <SolidColorBrush x:Key="StudioSelectionBrush">#04395E</SolidColorBrush>
+                    <SolidColorBrush x:Key="StudioAccentBrush">#3794C7</SolidColorBrush>
+                    <SolidColorBrush x:Key="StudioStatusBackgroundBrush">#181818</SolidColorBrush>
+                    <SolidColorBrush x:Key="StudioTextBrush">#CCCCCC</SolidColorBrush>
+                    <SolidColorBrush x:Key="StudioMutedTextBrush">#969696</SolidColorBrush>
+                    <SolidColorBrush x:Key="StudioSubtleTextBrush">#707070</SolidColorBrush>
+                </ResourceDictionary>
+                <ResourceDictionary x:Key="Light">
+                    <SolidColorBrush x:Key="StudioWindowBackgroundBrush">#F3F3F3</SolidColorBrush>
+                    <SolidColorBrush x:Key="StudioMenuBackgroundBrush">#F3F3F3</SolidColorBrush>
+                    <SolidColorBrush x:Key="StudioSideBackgroundBrush">#F3F3F3</SolidColorBrush>
+                    <SolidColorBrush x:Key="StudioEditorBackgroundBrush">#FFFFFF</SolidColorBrush>
+                    <SolidColorBrush x:Key="StudioPanelBackgroundBrush">#F3F3F3</SolidColorBrush>
+                    <SolidColorBrush x:Key="StudioTabBackgroundBrush">#ECECEC</SolidColorBrush>
+                    <SolidColorBrush x:Key="StudioInputBackgroundBrush">#FFFFFF</SolidColorBrush>
+                    <SolidColorBrush x:Key="StudioControlBackgroundBrush">#E8E8E8</SolidColorBrush>
+                    <SolidColorBrush x:Key="StudioPopupBackgroundBrush">#FFFFFF</SolidColorBrush>
+                    <SolidColorBrush x:Key="StudioBorderBrush">#E1E1E1</SolidColorBrush>
+                    <SolidColorBrush x:Key="StudioControlBorderBrush">#C8C8C8</SolidColorBrush>
+                    <SolidColorBrush x:Key="StudioHoverBorderBrush">#9F9F9F</SolidColorBrush>
+                    <SolidColorBrush x:Key="StudioHoverBrush">#E8E8E8</SolidColorBrush>
+                    <SolidColorBrush x:Key="StudioPressedBrush">#DADADA</SolidColorBrush>
+                    <SolidColorBrush x:Key="StudioSelectionBrush">#D6EBFA</SolidColorBrush>
+                    <SolidColorBrush x:Key="StudioAccentBrush">#007ACC</SolidColorBrush>
+                    <SolidColorBrush x:Key="StudioStatusBackgroundBrush">#F3F3F3</SolidColorBrush>
+                    <SolidColorBrush x:Key="StudioTextBrush">#333333</SolidColorBrush>
+                    <SolidColorBrush x:Key="StudioMutedTextBrush">#616161</SolidColorBrush>
+                    <SolidColorBrush x:Key="StudioSubtleTextBrush">#808080</SolidColorBrush>
+                </ResourceDictionary>
+            </ResourceDictionary.ThemeDictionaries>
+        </ResourceDictionary>
+    </Application.Resources>
+    <Application.Styles>
+        <FluentTheme DensityStyle="Compact" />
+        <StyleInclude Source="avares://AvaloniaEdit/Themes/Fluent/AvaloniaEdit.xaml" />
+        <StyleInclude Source="avares://Junexis.Studio.Shell/Styles/StudioTheme.axaml" />
+    </Application.Styles>
+</Application>

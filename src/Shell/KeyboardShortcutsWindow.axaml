@@ -1,0 +1,42 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:Junexis.Studio.Shell"
+        x:Class="Junexis.Studio.Shell.KeyboardShortcutsWindow"
+        Title="Keyboard Shortcuts"
+        Width="680" Height="520"
+        MinWidth="480" MinHeight="320"
+        WindowStartupLocation="CenterOwner"
+        Background="{DynamicResource StudioWindowBackgroundBrush}">
+    <Grid RowDefinitions="Auto,*" Margin="16">
+        <TextBox Grid.Row="0"
+                 x:Name="FilterBox"
+                 Watermark="Filter shortcuts…"
+                 Margin="0,0,0,10"
+                 TextChanged="OnFilterChanged" />
+        <ListBox Grid.Row="1"
+                 x:Name="ShortcutList"
+                 Background="Transparent"
+                 BorderThickness="0">
+            <ListBox.ItemTemplate>
+                <DataTemplate x:DataType="local:ShortcutEntry">
+                    <Grid ColumnDefinitions="180,*" Margin="2,3">
+                        <TextBlock Grid.Column="0"
+                                   Text="{Binding Gesture}"
+                                   FontFamily="Cascadia Code,Consolas,monospace"
+                                   FontSize="13"
+                                   Foreground="{DynamicResource StudioAccentBrush}"
+                                   VerticalAlignment="Center" />
+                        <StackPanel Grid.Column="1" Spacing="1">
+                            <TextBlock Text="{Binding DisplayName}"
+                                       FontSize="13"
+                                       Foreground="{DynamicResource StudioTextBrush}" />
+                            <TextBlock Text="{Binding Category}"
+                                       FontSize="11"
+                                       Foreground="{DynamicResource StudioMutedTextBrush}" />
+                        </StackPanel>
+                    </Grid>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+    </Grid>
+</Window>

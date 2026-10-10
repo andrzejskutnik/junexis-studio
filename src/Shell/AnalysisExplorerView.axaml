@@ -1,0 +1,262 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:host="clr-namespace:Junexis.Studio.Host;assembly=Junexis.Studio.Host"
+             xmlns:abstractions="clr-namespace:Junexis.Studio.Abstractions;assembly=Junexis.Studio.Abstractions"
+             x:DataType="host:AnalysisExplorerViewModel"
+             x:Class="Junexis.Studio.Shell.AnalysisExplorerView">
+    <Grid RowDefinitions="Auto,Auto,*" Margin="6">
+        <TextBlock Grid.Row="0" Text="{Binding StatusText}" TextWrapping="Wrap" />
+        <TextBlock Grid.Row="1" Text="{Binding TopologyText}" TextWrapping="Wrap" Margin="0,3,0,8" FontSize="11" />
+        <TabControl Grid.Row="2">
+            <TabItem Header="Symbols">
+                <ListBox x:Name="SymbolsList"
+                         ItemsSource="{Binding Symbols}"
+                         DoubleTapped="OnSymbolDoubleTapped">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate x:DataType="abstractions:AnalysisSymbol">
+                            <Border Padding="5" Margin="0,0,0,3" Classes="panel-card">
+                                <StackPanel Spacing="2">
+                                    <TextBlock Text="{Binding Name}" FontWeight="SemiBold" />
+                                    <TextBlock Text="{Binding Kind, StringFormat=Kind: {0}}" FontSize="11" />
+                                    <TextBlock Text="{Binding Id}" FontSize="10" Opacity="0.7" />
+                                </StackPanel>
+                            </Border>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </TabItem>
+            <TabItem Header="Communications">
+                <ListBox x:Name="RelationsList"
+                         ItemsSource="{Binding Relations}"
+                         DoubleTapped="OnRelationDoubleTapped">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate x:DataType="abstractions:AnalysisRelation">
+                            <Border Padding="5" Margin="0,0,0,3" Classes="panel-card">
+                                <StackPanel Spacing="2">
+                                    <TextBlock Text="{Binding CommunicationKind}" FontWeight="SemiBold" />
+                                    <TextBlock Text="{Binding SourceSymbolId}" FontSize="11" />
+                                    <TextBlock Text="→" FontSize="11" />
+                                    <TextBlock Text="{Binding TargetSymbolId}" FontSize="11" />
+                                    <TextBlock Text="{Binding PipelineSymbolId}" FontSize="10" Opacity="0.7" />
+                                </StackPanel>
+                            </Border>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </TabItem>
+            <TabItem Header="Mentor">
+                <Grid RowDefinitions="Auto,Auto,*">
+                    <StackPanel Grid.Row="0" Orientation="Horizontal" Spacing="6" Margin="0,0,0,5">
+                        <Border Padding="5,2"
+                                CornerRadius="3"
+                                Background="#252526"
+                                BorderBrush="#4a4a4a"
+                                BorderThickness="1">
+                            <TextBlock Text="{Binding MentorPresenceText}" FontSize="11" FontWeight="SemiBold" />
+                        </Border>
+                        <TextBlock Text="{Binding MentorFreshnessText}"
+                                   VerticalAlignment="Center"
+                                   FontSize="10"
+                                   Opacity="0.78" />
+                    </StackPanel>
+                    <StackPanel Grid.Row="1" Margin="0,0,0,6" Spacing="2">
+                        <TextBlock Text="{Binding MentorStatusText}" TextWrapping="Wrap" />
+                        <TextBlock Text="{Binding MentorDeltaText}" TextWrapping="Wrap" FontSize="11" Opacity="0.82" />
+                    </StackPanel>
+                    <TabControl Grid.Row="2">
+                        <TabItem Header="Findings">
+                            <Grid RowDefinitions="*,Auto">
+                                <ListBox x:Name="FindingsList"
+                                         Grid.Row="0"
+                                         ItemsSource="{Binding Findings}"
+                                         SelectedItem="{Binding SelectedFinding}"
+                                         DoubleTapped="OnFindingDoubleTapped">
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate x:DataType="abstractions:MentorFinding">
+                                            <Border Padding="5" Margin="0,0,0,3" Classes="panel-card">
+                                                <StackPanel Spacing="2">
+                                                    <TextBlock Text="{Binding Code}" FontWeight="SemiBold" />
+                                                    <TextBlock Text="{Binding Severity}" FontSize="11" />
+                                                    <TextBlock Text="{Binding Message}" TextWrapping="Wrap" FontSize="11" />
+                                                    <TextBlock Text="{Binding Explanation}" TextWrapping="Wrap" FontSize="11" Opacity="0.85" />
+                                                    <TextBlock Text="{Binding RecommendedAction}" TextWrapping="Wrap" FontSize="11" FontStyle="Italic" />
+                                                    <TextBlock Text="{Binding RelatedSymbolId}" FontSize="10" Opacity="0.7" />
+                                                </StackPanel>
+                                            </Border>
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                </ListBox>
+                                <Border Grid.Row="1"
+                                        Margin="0,6,0,0"
+                                        Padding="6"
+                                        Background="#1e1e1e"
+                                        BorderBrush="#3c3c3c"
+                                        BorderThickness="1">
+                                    <StackPanel Spacing="5">
+                                        <TextBlock Text="Safe refactoring"
+                                                   FontWeight="SemiBold"
+                                                   FontSize="11" />
+                                        <TextBlock Text="{Binding RefactoringStatusText}"
+                                                   TextWrapping="Wrap"
+                                                   FontSize="10"
+                                                   Opacity="0.84" />
+                                        <TextBlock Text="{Binding RefactoringEvidenceText}"
+                                                   IsVisible="{Binding HasRefactoringPreview}"
+                                                   TextWrapping="Wrap"
+                                                   FontSize="10"
+                                                   Opacity="0.78" />
+                                        <TextBox Text="{Binding RefactoringPatch}"
+                                                 IsVisible="{Binding HasRefactoringPreview}"
+                                                 IsReadOnly="True"
+                                                 AcceptsReturn="True"
+                                                 TextWrapping="NoWrap"
+                                                 FontFamily="Consolas"
+                                                 FontSize="10"
+                                                 MinHeight="64"
+                                                 MaxHeight="170"
+                                                 Watermark="The exact patch will appear here." />
+                                        <WrapPanel Orientation="Horizontal">
+                                            <Button Content="Preview"
+                                                    IsEnabled="{Binding CanPreviewRefactoring}"
+                                                    Click="OnPreviewRefactoringClick"
+                                                    Margin="0,0,5,5" />
+                                            <Button Content="Apply"
+                                                    IsEnabled="{Binding CanApplyRefactoring}"
+                                                    Click="OnApplyRefactoringClick"
+                                                    Margin="0,0,5,5" />
+                                            <Button Content="Compiler check"
+                                                    IsEnabled="{Binding CanValidateRefactoring}"
+                                                    Click="OnValidateRefactoringClick"
+                                                    Margin="0,0,5,5" />
+                                            <Button Content="Keep"
+                                                    IsEnabled="{Binding CanKeepRefactoring}"
+                                                    Click="OnKeepRefactoringClick"
+                                                    Margin="0,0,5,5" />
+                                            <Button Content="Revert"
+                                                    IsEnabled="{Binding CanRevertRefactoring}"
+                                                    Click="OnRevertRefactoringClick"
+                                                    Margin="0,0,5,5" />
+                                        </WrapPanel>
+                                    </StackPanel>
+                                </Border>
+                            </Grid>
+                        </TabItem>
+                        <TabItem Header="Insights">
+                            <ListBox ItemsSource="{Binding Insights}">
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate x:DataType="abstractions:MentorInsight">
+                                        <Border Padding="5" Margin="0,0,0,3" Classes="panel-card">
+                                            <StackPanel Spacing="2">
+                                                <TextBlock Text="{Binding Kind}" FontWeight="SemiBold" />
+                                                <TextBlock Text="{Binding Summary}" TextWrapping="Wrap" FontSize="11" />
+                                            </StackPanel>
+                                        </Border>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                        </TabItem>
+                        <TabItem Header="Patterns">
+                            <ListBox ItemsSource="{Binding Patterns}">
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate x:DataType="abstractions:MentorPattern">
+                                        <Border Padding="5" Margin="0,0,0,3" Classes="panel-card">
+                                            <StackPanel Spacing="2">
+                                                <TextBlock Text="{Binding Name}" FontWeight="SemiBold" />
+                                                <TextBlock Text="{Binding PatternId}" FontSize="10" Opacity="0.7" />
+                                                <TextBlock Text="{Binding Rationale}" TextWrapping="Wrap" FontSize="11" />
+                                            </StackPanel>
+                                        </Border>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                        </TabItem>
+                        <TabItem Header="Conformance">
+                            <Grid RowDefinitions="Auto,*">
+                                <TextBlock Grid.Row="0"
+                                           Text="{Binding ConformanceStatusText}"
+                                           TextWrapping="Wrap"
+                                           Margin="0,0,0,6" />
+                                <ListBox Grid.Row="1" ItemsSource="{Binding ConformanceGaps}">
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate x:DataType="abstractions:MentorConformanceGap">
+                                            <Border Padding="5" Margin="0,0,0,3" BorderBrush="#705f2d" BorderThickness="1">
+                                                <StackPanel Spacing="2">
+                                                    <TextBlock Text="{Binding Id}" FontWeight="SemiBold" />
+                                                    <TextBlock Text="{Binding AchievedLevel, StringFormat=Achieved: {0}}" FontSize="11" />
+                                                    <TextBlock Text="{Binding TargetLevel, StringFormat=Target: {0}}" FontSize="11" />
+                                                    <TextBlock Text="Quality evidence only — compilation remains independent."
+                                                               FontSize="10"
+                                                               FontStyle="Italic"
+                                                               Opacity="0.78" />
+                                                </StackPanel>
+                                            </Border>
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                </ListBox>
+                            </Grid>
+                        </TabItem>
+                        <TabItem Header="Policy">
+                            <Grid RowDefinitions="Auto,*">
+                                <TextBlock Grid.Row="0"
+                                           Text="{Binding ProjectPolicyStatusText}"
+                                           TextWrapping="Wrap"
+                                           FontSize="10"
+                                           Opacity="0.82"
+                                           Margin="0,0,0,6" />
+                                <TabControl Grid.Row="1">
+                                    <TabItem Header="Decisions">
+                                        <ListBox ItemsSource="{Binding ProjectDecisions}">
+                                            <ListBox.ItemTemplate>
+                                                <DataTemplate x:DataType="abstractions:MentorProjectDecision">
+                                                    <Border Padding="5" Margin="0,0,0,3" Classes="panel-card">
+                                                        <StackPanel Spacing="2">
+                                                            <TextBlock Text="{Binding Title}" FontWeight="SemiBold" />
+                                                            <TextBlock Text="{Binding Id}" FontSize="10" Opacity="0.7" />
+                                                            <TextBlock Text="{Binding Rationale}" TextWrapping="Wrap" FontSize="11" />
+                                                        </StackPanel>
+                                                    </Border>
+                                                </DataTemplate>
+                                            </ListBox.ItemTemplate>
+                                        </ListBox>
+                                    </TabItem>
+                                    <TabItem Header="Suppressions">
+                                        <ListBox ItemsSource="{Binding ProjectSuppressions}">
+                                            <ListBox.ItemTemplate>
+                                                <DataTemplate x:DataType="abstractions:MentorProjectSuppression">
+                                                    <Border Padding="5" Margin="0,0,0,3" Classes="panel-card">
+                                                        <StackPanel Spacing="2">
+                                                            <TextBlock Text="{Binding RuleCode}" FontWeight="SemiBold" />
+                                                            <TextBlock Text="{Binding SymbolId}" FontSize="10" Opacity="0.75" />
+                                                            <TextBlock Text="{Binding Rationale}" TextWrapping="Wrap" FontSize="11" />
+                                                            <TextBlock Text="{Binding ExpiresOn, StringFormat=Expires: {0}}" FontSize="10" Opacity="0.7" />
+                                                        </StackPanel>
+                                                    </Border>
+                                                </DataTemplate>
+                                            </ListBox.ItemTemplate>
+                                        </ListBox>
+                                    </TabItem>
+                                    <TabItem Header="Applied now">
+                                        <ListBox ItemsSource="{Binding AppliedSuppressions}">
+                                            <ListBox.ItemTemplate>
+                                                <DataTemplate x:DataType="abstractions:MentorAppliedSuppression">
+                                                    <Border Padding="5" Margin="0,0,0,3" BorderBrush="#705f2d" BorderThickness="1">
+                                                        <StackPanel Spacing="2">
+                                                            <TextBlock Text="{Binding Finding.Code}" FontWeight="SemiBold" />
+                                                            <TextBlock Text="{Binding Finding.Message}" TextWrapping="Wrap" FontSize="11" />
+                                                            <TextBlock Text="{Binding Suppression.Id, StringFormat=Accepted by: {0}}" FontSize="10" />
+                                                            <TextBlock Text="{Binding Suppression.Rationale}" TextWrapping="Wrap" FontSize="11" FontStyle="Italic" />
+                                                        </StackPanel>
+                                                    </Border>
+                                                </DataTemplate>
+                                            </ListBox.ItemTemplate>
+                                        </ListBox>
+                                    </TabItem>
+                                </TabControl>
+                            </Grid>
+                        </TabItem>
+                    </TabControl>
+                </Grid>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</UserControl>

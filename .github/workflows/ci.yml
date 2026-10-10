@@ -1,0 +1,26 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  core-tests:
+    name: Core tests (publicly available contracts)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Run Core tests without external Mentor fixtures
+        run: dotnet test tests/Junexis.Studio.Core.Tests/Junexis.Studio.Core.Tests.csproj --configuration Release --verbosity minimal --filter "FullyQualifiedName!~M1002_ProposalMatchesSharedClientContract&FullyQualifiedName!~M1012_ProposalMatchesSharedClientContract"
