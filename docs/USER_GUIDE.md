@@ -418,8 +418,8 @@ zgaduje na podstawie „najbliższej” deklaracji. Brak takiego dowodu oznacza 
 komentarza Mentora. Tryb **Quiet** zachowuje kontekst wyłącznie w panelu
 Analysis.
 
-Pełna filozofia, zasady zaufania, szybki start i kontrakt rozwoju:
-[Junexis Mentor — podręcznik produktu i rozwoju](../../junexis-mentor/docs/MENTOR_HANDBOOK.md).
+Pełna filozofia, zasady zaufania, szybki start i kontrakt rozwoju Mentora
+znajdują się w osobnym podręczniku projektu.
 
 ## Usługi językowe i LSP
 

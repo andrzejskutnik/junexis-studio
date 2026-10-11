@@ -24,8 +24,6 @@
     <ProjectReference Include="..\..\src\Abstractions\Junexis.Studio.Abstractions.csproj" />
     <ProjectReference Include="..\..\src\Core\Junexis.Studio.Core.csproj" />
     <ProjectReference Include="..\..\src\Host\Junexis.Studio.Host.csproj" />
-    <ProjectReference Include="..\..\..\junexis-observability\src\Junexis.Observability.Contracts\Junexis.Observability.Contracts.csproj" />
-    <ProjectReference Include="..\..\..\junexis-observability\src\Junexis.Observability.Ingress\Junexis.Observability.Ingress.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,0 +1,40 @@
+{
+  "schemaVersion": "1.0",
+  "ruleCode": "M1012",
+  "projectRoot": "workspace",
+  "sourceFile": "src/main.jnx",
+  "pipeline": {
+    "id": "pipeline:Telemetry",
+    "kind": "pipeline",
+    "name": "Telemetry",
+    "source": {
+      "file": "src/main.jnx",
+      "line": 1,
+      "column": 1
+    }
+  },
+  "symbol": {
+    "id": "narrative:Telemetry operations",
+    "kind": "narrative",
+    "name": "Telemetry operations",
+    "source": {
+      "file": "src/main.jnx",
+      "line": 4,
+      "column": 1
+    }
+  },
+  "finding": {
+    "code": "M1012",
+    "severity": "warning",
+    "message": "Narrative is not connected.",
+    "relatedSymbolId": "narrative:Telemetry operations",
+    "source": {
+      "file": "src/main.jnx",
+      "line": 4,
+      "column": 1
+    }
+  },
+  "originalContent": "pipeline Telemetry {\n}\n\nnarrative \"Telemetry operations\" {\n    intent \"Observe telemetry behavior\"\n}\n",
+  "expectedUpdatedContent": "pipeline Telemetry {\n}\n\nnarrative \"Telemetry operations\" {\n    intent \"Observe telemetry behavior\"\n    applies_to { Telemetry }\n}\n",
+  "expectedPatch": "--- a/src/main.jnx\n+++ b/src/main.jnx\n@@ -5,0 +6,1 @@\n+    applies_to { Telemetry }"
+}

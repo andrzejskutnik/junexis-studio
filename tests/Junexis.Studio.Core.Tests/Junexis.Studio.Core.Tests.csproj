@@ -19,6 +19,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="Contracts\*.json" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\src\Core\Junexis.Studio.Core.csproj" />
     <ProjectReference Include="..\..\src\Abstractions\Junexis.Studio.Abstractions.csproj" />
   </ItemGroup>

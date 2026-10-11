@@ -255,20 +255,13 @@ public sealed class MentorRefactoringServiceTests
 
     private static string FindSharedContract(string ruleCode = "M1002")
     {
-        for (var directory = new DirectoryInfo(AppContext.BaseDirectory);
-             directory is not null;
-             directory = directory.Parent)
-        {
-            var candidate = Path.Combine(
-                directory.FullName,
-                "junexis-mentor",
-                "docs",
-                $"mentor-refactoring-{ruleCode.ToLowerInvariant()}.fixture.json");
-            if (File.Exists(candidate))
-                return candidate;
-        }
-        throw new FileNotFoundException(
-            $"Cannot locate the shared Mentor {ruleCode} client contract.");
+        var contractPath = Path.Combine(
+            AppContext.BaseDirectory,
+            "Contracts",
+            $"mentor-refactoring-{ruleCode.ToLowerInvariant()}.fixture.json");
+        return File.Exists(contractPath)
+            ? contractPath
+            : throw new FileNotFoundException($"Cannot locate the Mentor {ruleCode} client contract.", contractPath);
     }
 
     private sealed class StubOpenDocuments : IOpenDocumentRepository

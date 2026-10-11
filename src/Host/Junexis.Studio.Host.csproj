@@ -4,8 +4,7 @@
     <ProjectReference Include="..\Abstractions\Junexis.Studio.Abstractions.csproj" />
     <ProjectReference Include="..\Core\Junexis.Studio.Core.csproj" />
     <ProjectReference Include="..\..\extensions\JunexisLang.CompilerExtension\JunexisLang.CompilerExtension.csproj" />
-    <ProjectReference Include="..\..\..\junexis-mcp-studio\src\Junexis.Mcp.Studio\Junexis.Mcp.Studio.csproj" />
-    <ProjectReference Include="..\..\..\junexis-mcp-studio\src\Junexis.Mcp.Studio.Integration\Junexis.Mcp.Studio.Integration.csproj" />
+    <PackageReference Include="Junexis.Studio.Platform.Binaries" />
   </ItemGroup>
 
   <PropertyGroup>

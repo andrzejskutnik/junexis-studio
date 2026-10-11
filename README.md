@@ -49,25 +49,18 @@ architektury, DAP, struktury repo i zasad pracy nad projektem.
 ## Minimalne wymagania
 
 - .NET SDK 10,
-- zbudowany compiler Junexis,
-- zbudowany Mentor dla zakładki findings.
+- dostęp do NuGet.org podczas przywracania pakietów.
 
-Pełna solucja Studio ma również referencje projektowe do
-`junexis-observability` i `junexis-mcp-studio`. Te repozytoria nie są jeszcze
-dostępne publicznie, dlatego sam klon tego repo nie wystarcza do zbudowania i
-uruchomienia całej aplikacji. Pełny build wymaga workspace z tymi projektami
-oraz z compilerem i Mentorem. Dwa testy kontraktowe Core korzystają z fixture'ów
-z repozytorium Mentor i są pomijane w publicznym CI; pozostałe testy Core
-uruchamia workflow GitHub Actions. Nie jest to walidacja całej solucji ani UI.
+Powiązane biblioteki platformy są pobierane jako wersjonowany pakiet
+`Junexis.Studio.Platform.Binaries`; nie są wymagane sąsiednie, prywatne
+checkouty repozytoriów.
 
 ## Szybki start
 
 ```powershell
-# W workspace zawierającym wymagane repozytoria junexis-*
-dotnet build .\junexis-lang\compiler\JunexisLang.Compiler.CLI\JunexisLang.Compiler.CLI.csproj
-dotnet build .\junexis-mentor\JunexisLang.Mentor.CLI\JunexisLang.Mentor.CLI.csproj
-dotnet build .\junexis-studio\JunexisStudio.sln -c Debug
-dotnet run --project .\junexis-studio\src\Shell\Junexis.Studio.Shell.csproj -c Debug
+dotnet restore .\JunexisStudio.sln
+dotnet test .\JunexisStudio.sln -c Release
+dotnet run --project .\src\Shell\Junexis.Studio.Shell.csproj -c Release
 ```
 
 Po starcie Studio przywróci ostatni poprawny folder albo pokaże ekran z

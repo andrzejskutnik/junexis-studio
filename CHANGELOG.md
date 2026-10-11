@@ -4,6 +4,14 @@ Format inspirowany: *Keep a Changelog* oraz *Semantic Versioning*.
 
 ## Unreleased
 
+### Build
+
+- Public Studio builds now restore its compiler, Mentor, MCP, and observability
+  assemblies from the MIT-licensed `Junexis.Studio.Platform.Binaries` NuGet
+  package. The GitHub Actions workflow builds and tests the complete solution.
+- M1002/M1012 contract tests now use checked-in fixtures, so they run without a
+  neighboring Mentor checkout.
+
 ### 2026-09-25 — wspólny adres panelu
 
 Wyjątek właściciela: ta implementacja może powstać bez issue. Zakres obejmuje

@@ -9,9 +9,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\Abstractions\Junexis.Studio.Abstractions.csproj" />
-    <ProjectReference Include="..\..\..\junexis-observability\src\Junexis.Observability.Adapters.Deploy\Junexis.Observability.Adapters.Deploy.csproj" />
-    <ProjectReference Include="..\..\..\junexis-observability\src\Junexis.Observability.Adapters.Studio\Junexis.Observability.Adapters.Studio.csproj" />
-    <ProjectReference Include="..\..\..\junexis-observability\src\Junexis.Observability.Ingress\Junexis.Observability.Ingress.csproj" />
+    <PackageReference Include="Junexis.Studio.Platform.Binaries" />
   </ItemGroup>
 
   <ItemGroup>
