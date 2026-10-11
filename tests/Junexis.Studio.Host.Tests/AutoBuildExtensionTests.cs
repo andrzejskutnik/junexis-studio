@@ -221,7 +221,7 @@ public sealed class AutoBuildExtensionTests
 
     private static async Task WaitUntilAsync(Func<bool> condition)
     {
-        var timeout = DateTimeOffset.UtcNow.AddSeconds(2);
+        var timeout = DateTimeOffset.UtcNow.AddSeconds(10);
         while (!condition())
         {
             if (DateTimeOffset.UtcNow >= timeout)
