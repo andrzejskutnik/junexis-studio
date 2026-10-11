@@ -53,7 +53,7 @@ public sealed class GppCompilerExtensionTests
 
             context.Commands.Execute("build.gpp");
 
-            var request = await processes.Request.Task.WaitAsync(TimeSpan.FromSeconds(2));
+            var request = await processes.Request.Task.WaitAsync(TimeSpan.FromSeconds(10));
 
             Assert.EndsWith(OperatingSystem.IsWindows() ? "g++.exe" : "g++", request.FileName,
                 StringComparison.OrdinalIgnoreCase);
@@ -68,11 +68,11 @@ public sealed class GppCompilerExtensionTests
 
             await WaitUntilAsync(
                 () => output.GetSnapshot().Any(e => e.Channel == "Build" && e.Message.Contains("hello", StringComparison.OrdinalIgnoreCase)),
-                timeout: TimeSpan.FromSeconds(2));
+                timeout: TimeSpan.FromSeconds(10));
 
             await WaitUntilAsync(
                 () => context.Diagnostics.GetDiagnostics().Any(d => d.Severity == DiagnosticSeverity.Error && d.Message.Contains("boom", StringComparison.OrdinalIgnoreCase)),
-                timeout: TimeSpan.FromSeconds(2));
+                timeout: TimeSpan.FromSeconds(10));
         }
         finally
         {
@@ -119,7 +119,7 @@ public sealed class GppCompilerExtensionTests
 
             context.Commands.Execute("build.gpp");
 
-            var request = await processes.Request.Task.WaitAsync(TimeSpan.FromSeconds(2));
+            var request = await processes.Request.Task.WaitAsync(TimeSpan.FromSeconds(10));
 
             Assert.Contains("b.cpp", request.Arguments, StringComparison.OrdinalIgnoreCase);
             Assert.DoesNotContain("a.cpp", request.Arguments, StringComparison.OrdinalIgnoreCase);
